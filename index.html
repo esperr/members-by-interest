@@ -1,0 +1,246 @@
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>Find a Member by Interest</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style type="text/css">
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/roboto/v15/Fcx7Wwv8OzT71A3E1XOAjvesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+  }
+  </style>
+  <script>
+    //Google analytics script goes here!
+  </script>
+</head>
+
+<!--
+Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
+-->
+<body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <div class="container">
+
+  <div id="topbanner" class="jumbotron">
+    <h1>Members by Interest</h1>
+    <a id="about" class="label label-default" href="about.html">About Members by Interest</a>
+  </div>
+  <div class="row">
+
+  <h1>Search interests by:</h1>
+  <div id="togglesearch" class="btn-group btn-group-toggle" data-toggle="buttons">
+    <label class="btn btn-primary active">
+      <input type="radio" name="searchtype" value="subjecttoggle" autocomplete="off" checked> Subject or Policy Area
+    </label>
+    <label class="btn btn-primary">
+      <input type="radio" name="searchtype" value="membertoggle" autocomplete="off"> Member
+    </label>
+
+  </div>
+
+  <div id="subjectsearch">
+    <label for="subjectlisting">Subject or Area</label>
+     <select id="subjectlisting">
+    </select>
+    <div id="subjectresults">
+    </div>
+  </div>
+
+  <div id="membersearch">
+    <label for="memberlisting">Choose a Member</label>
+  <select id="memberlisting">
+     </select>
+     <div id="memberresults">
+
+  </div>
+
+</div>
+
+</div>
+   <script>
+   var billType = "HR";
+   var congress = 113;
+   var classification = "policyareas";
+
+   var members;
+   var filenameStem = "https://esperr.github.io/congressviz/data/"
+
+   getMembers();
+   getSubjects();
+   google.charts.load('current', {packages: ['corechart', 'bar']});
+
+   //start by showing only subject search
+   $( "#membersearch" ).toggle();
+
+
+   function getMembers() {
+     filename = filenameStem + "members_" + congress + "_" + billType + ".js";
+     $.getJSON( filename, function( data ) {
+       members = data;
+       var sortedMembers = membersort(members);
+       var auxArr = [];
+       $.each(sortedMembers, function(i, member)
+         {
+           if (member['district']) {
+             auxArr[i] = "<option value='" + member['bioid'] + "'>" + member['fullname'] + "</option>";
+           }
+         });
+        $('#memberlisting').append(auxArr.join(''));
+     })
+     .fail(function() {
+       alert( "There was some sort of problem -- please reload the page" );
+     });
+   }
+
+   //console.log(members);
+
+   function getSubjects() {
+     filename = filenameStem + "policyareasbymember_" + congress + "_" + billType + ".js";
+     $.getJSON( filename, function( data ) {
+       allsubjects = data;
+       var subjects = [];
+       for (subject in allsubjects) {
+         subjects.push(subject);
+         subjects.sort();
+       }
+       var auxArr = [];
+       $.each(subjects, function(i, subject)
+         { var nounder = subject.replace(/_/g, ' ');
+           auxArr[i] = "<option value='" + subject + "'>" + nounder + "</option>";
+         });
+       $('#subjectlisting').append(auxArr.join(''));
+     })
+     .fail(function() {
+       alert( "There was some sort of problem -- please reload the page" );
+     });
+  }
+
+
+   $( "#subjectlisting" ).change(function() {
+     subject = $( "#subjectlisting option:selected" ).val();
+     memberrank(subject);
+   });
+
+   $( "#memberlisting" ).change(function() {
+     member = $( "#memberlisting option:selected" ).val();
+     topsubjects(member);
+   });
+
+   $('#togglesearch input').on('change', function() {
+     $( "#membersearch" ).toggle();
+     $( "#subjectsearch" ).toggle();
+   });
+
+   function memberrank(subject) {
+     var ranklist = [];
+     var memberlink ="https://www.congress.gov/search?q={%22source%22%3A%22members%22%2C%22search%22%3A%22";
+     $.each( allsubjects[subject], function( key, value ) {
+       var sponsored = value['sponsored'] || 0;
+       var cosponsored = value['cosponsored'] || 0;
+       var score = (sponsored*3) + cosponsored;
+       var memberobj = { "member": key, "score": score, "sponsored": sponsored, "cosponsored": cosponsored };
+       if (memberobj.score > 0) {
+         ranklist.push(memberobj);
+       }
+       });
+       console.log(members.length);
+       var ranked = keysrt(ranklist, 'score', 'reverse');
+       console.log(ranked.length);
+       $( "#subjectresults" ).empty();
+       for (i=0; i<ranked.length; i++) {
+         var result = members.filter(function( member ) {
+           return member.bioid == ranked[i].member;
+         });
+         var mymember = (result[0]);
+         if (mymember) {
+           var mydiv = "<div class='member'><span class='name'><a href='" + memberlink + ranked[i].member + "%22}'>" + mymember.fullname + "</a></span>";
+           mydiv = mydiv + "<br /><span class='counts'>Sponsored: " + ranked[i].sponsored + " Cosponsored: " + ranked[i].cosponsored + "</span></div>"
+           $( "#subjectresults" ).append( mydiv );
+         }
+       }
+   }
+
+   function topsubjects(member) {
+     var interests = [];
+     $( "#memberresults" ).empty();
+     $.each( allsubjects, function( key, value ) {
+       var scanSubject = allsubjects[key];
+       if (scanSubject[member]) {
+         var sponsored = scanSubject[member]['sponsored'] || 0;
+         var cosponsored = scanSubject[member]['cosponsored'] || 0;
+         var bills = sponsored + cosponsored;
+         var proportion = bills / scanSubject['total'];
+         var subjectObj = { "member": member, "subject": key, "proportion": proportion };
+         interests.push(subjectObj);
+       }
+     });
+     var ranked = keysrt(interests, 'proportion', 'reverse');
+     var proparray = [];
+     var labels = ['Subject', 'Proportion',]
+     proparray.push(labels);
+     for (i=0; i<ranked.length; i++){
+       var nounder = ranked[i].subject.replace(/_/g, ' ');
+       proparray.push([nounder, ranked[i].proportion]);
+     }
+     console.log(proparray);
+     drawchart(proparray);
+   }
+
+   function drawchart(proparray) {
+     $( "#memberresults" ).append("<div id='chart_div' style='width: 900px; height: 500px;'></div>")
+         var data = google.visualization.arrayToDataTable(proparray);
+
+    var options = {
+      chart: {
+                  title: 'Bills by Subject',
+                  subtitle: 'Sponsored and cosponsored as proportion of all Bills',
+                },
+      chartArea: {width: '50%'},
+      hAxis: {
+        title: 'Proportion',
+        minValue: 0
+      },
+      vAxis: {
+        title: 'Subject'
+      },
+      bars: 'horizontal' // Required for Material Bar Charts.
+
+    };
+
+    var chart = new google.charts.Bar(document.getElementById('chart_div'));
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+
+
+   function membersort(sortMembers) {
+     var sorted = keysrt(sortMembers, "lastname");
+     return sorted;
+   }
+
+   function membermatch(bioid) {
+     for (i=0; i<members.length; i++) {
+       if (members[i].bioid == bioid) return members[i];
+     }
+   }
+
+   function keysrt(arr, key, reverse) {
+       var sortOrder = 1;
+       if(reverse){
+           sortOrder = -1;
+       }
+       return arr.sort(function(a, b) {
+           var x = a[key],
+               y = b[key];
+
+           return sortOrder * ((x < y) ? -1 : ((x > y) ? 1 : 0));
+       });
+   }
+   </script>
+
+ </body>
+</html>

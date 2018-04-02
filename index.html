@@ -3,6 +3,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
   <title>Find a Member by Interest</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="byinterest.css">
   <style type="text/css">
   @font-face {
     font-family: 'Roboto';
@@ -31,8 +32,20 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     <a id="about" class="label label-default" href="about.html">About Members by Interest</a>
   </div>
   <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
 
-  <h1>Search interests by:</h1>
+  <h1>Search by:</h1>
+  <select id="congress">
+      <option value="113">113</option>
+      <option value="114">114</option>
+      <option value="115">115</option>
+    </select>th congress
+
+    <select id="chamber">
+        <option value="house">House of Representatives</option>
+        <option value="senate">Senate</option>
+      </select>
+  <!--
   <div id="togglesearch" class="btn-group btn-group-toggle" data-toggle="buttons">
     <label class="btn btn-primary active">
       <input type="radio" name="searchtype" value="subjecttoggle" autocomplete="off" checked> Subject or Policy Area
@@ -42,6 +55,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     </label>
 
   </div>
+-->
 
   <div id="subjectsearch">
     <label for="subjectlisting">Subject or Area</label>
@@ -60,10 +74,10 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
   </div>
 
 </div>
-
+</div>
 </div>
    <script>
-   var billType = "HR";
+   var chamber = "house";
    var congress = 113;
    var classification = "policyareas";
 
@@ -79,14 +93,18 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
 
    function getMembers() {
-     filename = filenameStem + "members_" + congress + "_" + billType + ".js";
+     //filename = filenameStem + "members.js";
+     filename = "members.js"
      $.getJSON( filename, function( data ) {
        members = data;
        var sortedMembers = membersort(members);
        var auxArr = [];
        $.each(sortedMembers, function(i, member)
          {
-           if (member['district']) {
+           if (chamber == "house" && member['district']) {
+             auxArr[i] = "<option value='" + member['bioid'] + "'>" + member['fullname'] + "</option>";
+           }
+           if (chamber == "senate" && !member['district']) {
              auxArr[i] = "<option value='" + member['bioid'] + "'>" + member['fullname'] + "</option>";
            }
          });
@@ -100,7 +118,8 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    //console.log(members);
 
    function getSubjects() {
-     filename = filenameStem + "policyareasbymember_" + congress + "_" + billType + ".js";
+     //filename = filenameStem + "policyareasbymember_" + congress + "_" + chamber + ".js";
+     filename = "policyareasbymember_" + congress + "_" + chamber + ".js"
      $.getJSON( filename, function( data ) {
        allsubjects = data;
        var subjects = [];
@@ -139,6 +158,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    function memberrank(subject) {
      var ranklist = [];
      var memberlink ="https://www.congress.gov/search?q={%22source%22%3A%22members%22%2C%22search%22%3A%22";
+     //var memberlink = "https://www.congress.gov/member/";
      $.each( allsubjects[subject], function( key, value ) {
        var sponsored = value['sponsored'] || 0;
        var cosponsored = value['cosponsored'] || 0;
@@ -148,9 +168,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
          ranklist.push(memberobj);
        }
        });
-       console.log(members.length);
        var ranked = keysrt(ranklist, 'score', 'reverse');
-       console.log(ranked.length);
        $( "#subjectresults" ).empty();
        for (i=0; i<ranked.length; i++) {
          var result = members.filter(function( member ) {
@@ -158,7 +176,9 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
          });
          var mymember = (result[0]);
          if (mymember) {
-           var mydiv = "<div class='member'><span class='name'><a href='" + memberlink + ranked[i].member + "%22}'>" + mymember.fullname + "</a></span>";
+           var mydiv = "<div class='member'><span class='name'><a href='" + memberlink + ranked[i].member + "%22}' target='member'>" + mymember.fullname + "</a></span>";
+           //var mydiv = "<div class='member'><span class='name'><a href='" memberlink + mymember.firstname + "-" + mymember.lastname + "/" + ranked[i].member + ">" + mymember.fullname + "</a></span>";
+
            mydiv = mydiv + "<br /><span class='counts'>Sponsored: " + ranked[i].sponsored + " Cosponsored: " + ranked[i].cosponsored + "</span></div>"
            $( "#subjectresults" ).append( mydiv );
          }

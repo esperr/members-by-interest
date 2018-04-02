@@ -1,0 +1,15 @@
+#subjectresults .member {
+  padding: .5em;
+  margin: .8em;
+  border-radius: .5em;
+  border: 1px solid #000;
+  max-width: 25em;
+}
+
+#subjectresults .member a {
+  font-weight: bold;
+}
+
+.member .counts {
+  color: gray;
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+ <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="byinterest.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<title>About Members by Interest</title>
+</head>
+
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<div class="container">
+<div id="topbanner" class="jumbotron">
+	<h1>About Members by Interest</h1>
+	<a id="about" class="label label-default" href="index.html">Home</a>
+</div>
+   <div class="row">
+
+<div class="col-sm-7 col-md-7 col-lg-7 aboutleft">
+	<div class="panel panel-default">
+	<div class="panel-body">
+		<h2>Why Members by Interest?</h2>
+    <p>Members of congress vary in many ways, from their background to their party to the types of areas they represent.
+    Another important difference is that each member has their own set of personal interests that they bring to their work.</p>
+    <p>One member may be very interested in farming, while another converns herself primarily with foreign affairs. It is possible to guess at some of these interests by looking at
+    geographical region or committee assingments, but a more direct route is to examine the <em>types</em> of bills that an individual member spponsors and
+    cosponsors. This is useful information not only to observers of congress, but also for citizens who are especially concerned with a given issue.</p>
+    <h2>How it works</h2>
+    <p>Analysts from the <a href="http://www.loc.gov/crsinfo/about/">Congressional Research Service</a> look at each bill and resolution and assign them terms from two controlled vocabualaries:
+      <a href="https://www.congress.gov/help/field-values/policy-area">Policy Area terms</a> and <a href="https://www.congress.gov/help/field-values/legislative-subject-terms">
+      Legislative Subject Terms</a>. The former is a broad overview of the topic of a bill (only one heading is assigned), while the latter is much more granular, though less
+      easy to browse.</p>
+    <p>Using the <a href="https://www.gpo.gov/fdsys/bulkdata/BILLSTATUS">bulk bill status system</a> individual bills are downloaded. Then their subject and poilicy terms are extracted
+      and matched to member(s) sponsoring and cosponsoring each bill. The resulting data is displayed in two ways &emdash; first it is shown as ranked list of members for each sujbject.
+      Alternately, the user can choose to view an individual member and see the distribution of topics that they are engaged with graphed on a chart.</p>
+	</div>
+	</div>
+</div>
+
+<div class="col-sm-5 col-md-5 col-lg-5">
+ <div class="panel panel-default">
+<div class="panel-body">
+<h3>Contact</h3>
+<p>Members by Interest is a experimental project of Ed Sperr, M.L.I.S.</p>
+<p>Ed can be reached at <a href="mailto:ed_sperr@hotmail.com">ed_sperr@hotmail.com</a> or <a href="mailto:esperr@uga.edu">esperr@uga.edu</a>.</p>
+      </div>
+   </div>
+
+	<div class="panel panel-default">
+	<div class="panel-body">
+  	<h3>Technologies</h3>
+		<p>Members by Interest powered by <a href="http://jquery.com/">jQuery</a>. Govinfo does not a public API as yet, so a <a href="">custom webservice</a>
+      is used to fetch the JSON that provides the yearly counts. <a href="https://developers.google.com/chart/interactive/docs/gallery/barchart">Google Charts</a>
+      is used to draw the charts and responsive layout is made easier with <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
+    <p>You can find the source code for this application at <a href="https://github.com/esperr/members-by-interest">GitHub</a>.</p>
+
+    <h3>License</h3>
+		<p>Please note that the information provided here comes ultimately from the <a href="https://www.gpo.gov/">Government Printing Office</a>.</p>
+    <p>The code underlying this application is Public Domain, but if you use Members by Interest for publication, I'd appreciate a citation:
+      <blockquote>
+        Sperr E. Members by Interest [Internet]. 2018 [cited <em>your_date_here</em>]. Available from http://esperr.github.io/members-by-interest/
+      </blockquote>
+    </p>
+
+  </div>
+	</div>
+
+
+
+  <div class="panel panel-default">
+  <div class="panel-body">
+    <h2>See also...</h2>
+    <p>Want to have even more fun with visualization of congressional data? Check out <a href="https://esperr.github.io/committee-flow/">
+      Committee Flow</a> and <a href="https://esperr.github.io/congress-by-year/">Congress by Year</a></p>
+  </div>
+  </div>
+
+      </div>
+
+</div>
+</div>
+<script>
+(function() {
+var currentwidth = $(".aboutleft").innerWidth() * .9;
+console.log(currentwidth);
+$("img").width(currentwidth);
+})
+
+();
+</script>
+
+</body>

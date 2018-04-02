@@ -6,6 +6,70 @@ import json
 parser = argparse.ArgumentParser(description='Process a list of XML files downloaded from FDSys to produce a Sankey diagram')
 parser.add_argument("filespath", help="Path to downloaded files", nargs="+")
 
+dictSubjects = {}
+allPolicies = {}
+congresses = set()
+chambers = set()
+
+def buildSubjects(subjects, sponsors, cosponsors):
+    for subitem in subjects:
+        subject = subitem.find('name').text.replace(" ","_")
+        if subject not in dictSubjects:
+            dictSubjects[subject] = {}
+        if "total" in dictSubjects[subject]:
+            dictSubjects[subject]["total"] += 1
+        else:
+            dictSubjects[subject]["total"] = 1
+        for item in sponsors:
+            bioidnode = item.find('bioguideId')
+            if bioidnode is not None:
+                bioid = bioidnode.text
+                if bioid not in dictSubjects[subject]:
+                    dictSubjects[subject][bioid] = {}
+                if "sponsored" in dictSubjects[subject][bioid]:
+                    dictSubjects[subject][bioid]["sponsored"] += 1
+                else:
+                    dictSubjects[subject][bioid]["sponsored"] = 1
+        for item in cosponsors:
+            bioidnode = item.find('bioguideId')
+            if bioidnode is not None:
+                bioid = bioidnode.text
+                if bioid not in dictSubjects[subject]:
+                    dictSubjects[subject][bioid] = {}
+                if "cosponsored" in dictSubjects[subject][bioid]:
+                    dictSubjects[subject][bioid]["cosponsored"] += 1
+                else:
+                    dictSubjects[subject][bioid]["cosponsored"] = 1
+
+def buildPolicies(policy, sponsors, cosponsors):
+    policyarea = policy.text.replace(" ","_")
+    if policyarea not in allPolicies:
+        allPolicies[policyarea] = {}
+    if "total" in allPolicies[policyarea]:
+        allPolicies[policyarea]["total"] += 1
+    else:
+        allPolicies[policyarea]["total"] = 1
+    for item in sponsors:
+        bioidnode = item.find('bioguideId')
+        if bioidnode is not None:
+            bioid = bioidnode.text
+            if bioid not in allPolicies[policyarea]:
+                allPolicies[policyarea][bioid] = {}
+            if "sponsored" in allPolicies[policyarea][bioid]:
+                allPolicies[policyarea][bioid]["sponsored"] += 1
+            else:
+                allPolicies[policyarea][bioid]["sponsored"] = 1
+    for item in cosponsors:
+        bioidnode = item.find('bioguideId')
+        if bioidnode is not None:
+            bioid = bioidnode.text
+            if bioid not in allPolicies[policyarea]:
+                allPolicies[policyarea][bioid] = {}
+            if "cosponsored" in allPolicies[policyarea][bioid]:
+                allPolicies[policyarea][bioid]["cosponsored"] += 1
+            else:
+                allPolicies[policyarea][bioid]["cosponsored"] = 1
+
 def walkpath( path ):
     listing = os.listdir(path)
     tree = etree.parse(path + "\\" + listing[0])
@@ -22,76 +86,18 @@ def walkpath( path ):
     chambers.add(chamber)
 
     for infile in listing:
-      #print "current file is:" + infile
-      filepath = path + "\\" + infile
-      tree = etree.parse(filepath)
-      root = tree.getroot()
-      #allcommittees = root.findall('.//committees/billCommittees/item')
-      allsponsors = root.findall('.//sponsors/item')
-      allcosponsors = root.findall('.//cosponsors/item')
-      allsubjects = root.findall('.//billSubjects/legislativeSubjects/item')
-      policynode = root.find('.//policyArea/name')
-      if policynode is not None:
-          policyarea = policynode.text.replace(" ","_")
-          if policyarea not in allPolicies:
-              allPolicies[policyarea] = {}
-          if "total" in allPolicies[policyarea]:
-              allPolicies[policyarea]["total"] += 1
-          else:
-              allPolicies[policyarea]["total"] = 1
-          for item in allsponsors:
-              bioidnode = item.find('bioguideId')
-              if bioidnode is not None:
-                  bioid = bioidnode.text
-                  if bioid not in allPolicies[policyarea]:
-                      allPolicies[policyarea][bioid] = {}
-                  if "sponsored" in allPolicies[policyarea][bioid]:
-                      allPolicies[policyarea][bioid]["sponsored"] += 1
-                  else:
-                      allPolicies[policyarea][bioid]["sponsored"] = 1
-          for item in allcosponsors:
-              bioidnode = item.find('bioguideId')
-              if bioidnode is not None:
-                  bioid = bioidnode.text
-                  if bioid not in allPolicies[policyarea]:
-                      allPolicies[policyarea][bioid] = {}
-                  if "cosponsored" in allPolicies[policyarea][bioid]:
-                      allPolicies[policyarea][bioid]["cosponsored"] += 1
-                  else:
-                      allPolicies[policyarea][bioid]["cosponsored"] = 1
-      for subitem in allsubjects:
-          subject = subitem.find('name').text.replace(" ","_")
-          if subject not in dictSubjects:
-              dictSubjects[subject] = {}
-              if "total" in dictSubjects[subject]:
-                  dictSubjects[subject]["total"] += 1
-              else:
-                  dictSubjects[subject]["total"] = 1
-              for item in allsponsors:
-                  bioidnode = item.find('bioguideId')
-                  if bioidnode is not None:
-                      bioid = bioidnode.text
-                      if bioid not in dictSubjects[subject]:
-                          dictSubjects[subject][bioid] = {}
-                      if "sponsored" in dictSubjects[subject][bioid]:
-                          dictSubjects[subject][bioid]["sponsored"] += 1
-                      else:
-                          dictSubjects[subject][bioid]["sponsored"] = 1
-              for item in allcosponsors:
-                  bioidnode = item.find('bioguideId')
-                  if bioidnode is not None:
-                      bioid = bioidnode.text
-                      if bioid not in dictSubjects[subject]:
-                          dictSubjects[subject][bioid] = {}
-                      if "cosponsored" in dictSubjects[subject][bioid]:
-                          dictSubjects[subject][bioid]["cosponsored"] += 1
-                      else:
-                          dictSubjects[subject][bioid]["cosponsored"] = 1
-
-dictSubjects = {}
-allPolicies = {}
-congresses = set()
-chambers = set()
+        #print "current file is:" + infile
+        filepath = path + "\\" + infile
+        tree = etree.parse(filepath)
+        root = tree.getroot()
+        allsponsors = root.findall('.//sponsors/item')
+        allcosponsors = root.findall('.//cosponsors/item')
+        allsubjects = root.findall('.//billSubjects/legislativeSubjects/item')
+        policynode = root.find('.//policyArea/name')
+        if allsubjects is not None:
+            buildSubjects(allsubjects, allsponsors, allcosponsors)
+        if policynode is not None:
+            buildPolicies(policynode, allsponsors, allcosponsors)
 
 args = parser.parse_args()
 print args.filespath

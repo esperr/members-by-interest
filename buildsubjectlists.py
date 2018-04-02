@@ -112,5 +112,5 @@ else:
 with open("policyareasbymember_" + str(congress) + "_" + chamber + ".js", 'w') as outfile:
     json.dump(allPolicies, outfile)
 
-with open("subjectssbymember_" + str(congress) + "_" + chamber + ".js", 'w') as outfile:
+with open("subjectsbymember_" + str(congress) + "_" + chamber + ".js", 'w') as outfile:
     json.dump(dictSubjects, outfile)

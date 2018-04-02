@@ -34,28 +34,35 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
   <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12">
 
+      <div id="togglesearch" class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-primary active">
+          <input type="radio" name="searchtype" value="subject" autocomplete="off" checked> Subject or Policy Area
+        </label>
+        <label class="btn btn-primary">
+          <input type="radio" name="searchtype" value="member" autocomplete="off"> Member
+        </label>
+      </div>
+
   <h1>Search by:</h1>
   <select id="congress">
-      <option value="113">113</option>
+      <option value="113" selected>113</option>
       <option value="114">114</option>
       <option value="115">115</option>
+      <option value="all">113th - 115th</option>
     </select>th congress
 
     <select id="chamber">
-        <option value="house">House of Representatives</option>
+        <option value="house" selected>House of Representatives</option>
         <option value="senate">Senate</option>
       </select>
-  <!--
-  <div id="togglesearch" class="btn-group btn-group-toggle" data-toggle="buttons">
-    <label class="btn btn-primary active">
-      <input type="radio" name="searchtype" value="subjecttoggle" autocomplete="off" checked> Subject or Policy Area
-    </label>
-    <label class="btn btn-primary">
-      <input type="radio" name="searchtype" value="membertoggle" autocomplete="off"> Member
-    </label>
 
-  </div>
--->
+  <div id="membersearch">
+        <label for="memberlisting">Choose a Member</label>
+      <select id="memberlisting">
+         </select>
+         <div id="memberresults">
+      </div>
+    </div>
 
   <div id="subjectsearch">
     <label for="subjectlisting">Subject or Area</label>
@@ -65,61 +72,60 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     </div>
   </div>
 
-  <div id="membersearch">
-    <label for="memberlisting">Choose a Member</label>
-  <select id="memberlisting">
-     </select>
-     <div id="memberresults">
 
-  </div>
 
-</div>
 </div>
 </div>
    <script>
-   var chamber = "house";
-   var congress = 113;
+   var chamber = $( "#chamber option:selected" ).val();
+   var congress = $( "#congress option:selected" ).val();
    var classification = "policyareas";
+   var type = $('input[name=searchtype]:checked').val();
 
    var members;
-   var filenameStem = "https://esperr.github.io/congressviz/data/"
+   var filenameStem = "https://esperr.github.io/members-by-interest/data/"
 
    getMembers();
-   getSubjects();
+   //getSubjects();
    google.charts.load('current', {packages: ['corechart', 'bar']});
 
    //start by showing only subject search
-   $( "#membersearch" ).toggle();
+   //$( "#membersearch" ).toggle();
 
 
    function getMembers() {
-     //filename = filenameStem + "members.js";
-     filename = "members.js"
+     filename = filenameStem + "members_" + congress + ".js";
      $.getJSON( filename, function( data ) {
        members = data;
-       var sortedMembers = membersort(members);
-       var auxArr = [];
-       $.each(sortedMembers, function(i, member)
-         {
-           if (chamber == "house" && member['district']) {
-             auxArr[i] = "<option value='" + member['bioid'] + "'>" + member['fullname'] + "</option>";
-           }
-           if (chamber == "senate" && !member['district']) {
-             auxArr[i] = "<option value='" + member['bioid'] + "'>" + member['fullname'] + "</option>";
-           }
-         });
-        $('#memberlisting').append(auxArr.join(''));
+       listMembers();
+     })
+     .done(function() {
+       getSubjects();
      })
      .fail(function() {
        alert( "There was some sort of problem -- please reload the page" );
      });
    }
 
-   //console.log(members);
+   function listMembers() {
+     $('#memberlisting').empty();
+     var sortedMembers = membersort(members);
+     var auxArr = [];
+     $.each(sortedMembers, function(i, member)
+       {
+         if (chamber == "house" && member['district']) {
+           auxArr[i] = "<option value='" + member['bioid'] + "'>" + member['fullname'] + "</option>";
+         }
+         if (chamber == "senate" && !member['district']) {
+           auxArr[i] = "<option value='" + member['bioid'] + "'>" + member['fullname'] + "</option>";
+         }
+       });
+      $('#memberlisting').append(auxArr.join(''));
+
+   }
 
    function getSubjects() {
-     //filename = filenameStem + "policyareasbymember_" + congress + "_" + chamber + ".js";
-     filename = "policyareasbymember_" + congress + "_" + chamber + ".js"
+     filename = filenameStem + "policyareasbymember_" + congress + "_" + chamber + ".js";
      $.getJSON( filename, function( data ) {
        allsubjects = data;
        var subjects = [];
@@ -133,6 +139,9 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
            auxArr[i] = "<option value='" + subject + "'>" + nounder + "</option>";
          });
        $('#subjectlisting').append(auxArr.join(''));
+     })
+     .done(function() {
+       memberrank(subject);
      })
      .fail(function() {
        alert( "There was some sort of problem -- please reload the page" );
@@ -153,6 +162,19 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    $('#togglesearch input').on('change', function() {
      $( "#membersearch" ).toggle();
      $( "#subjectsearch" ).toggle();
+     type = $('input[name=searchtype]:checked').val();
+   });
+
+   $( "#congress" ).change(function() {
+     congress = $( "#congress option:selected" ).val();
+     getMembers();
+   });
+
+   $( "#chamber" ).change(function() {
+     chamber = $( "#chamber option:selected" ).val();
+     listMembers();
+     subject = $( "#subjectlisting option:selected" ).val();
+     memberrank(subject);
    });
 
    function memberrank(subject) {
@@ -160,28 +182,27 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      var memberlink ="https://www.congress.gov/search?q={%22source%22%3A%22members%22%2C%22search%22%3A%22";
      //var memberlink = "https://www.congress.gov/member/";
      $.each( allsubjects[subject], function( key, value ) {
+       console.log(allsubjects[subject]);
        var sponsored = value['sponsored'] || 0;
        var cosponsored = value['cosponsored'] || 0;
        var score = (sponsored*3) + cosponsored;
-       var memberobj = { "member": key, "score": score, "sponsored": sponsored, "cosponsored": cosponsored };
-       if (memberobj.score > 0) {
+       //sort chambers here?
+       if (score > 0) {
+         var result = members.filter(function( member ) {
+           return member.bioid == key;
+         });
+         var mymember = (result[0]);
+         var memberobj = { "fullname": mymember.fullname, "firstname": mymember.firstname, "lastname": mymember.lastname, "bioid": key, "score": score, "sponsored": sponsored, "cosponsored": cosponsored };
          ranklist.push(memberobj);
        }
        });
        var ranked = keysrt(ranklist, 'score', 'reverse');
        $( "#subjectresults" ).empty();
        for (i=0; i<ranked.length; i++) {
-         var result = members.filter(function( member ) {
-           return member.bioid == ranked[i].member;
-         });
-         var mymember = (result[0]);
-         if (mymember) {
-           var mydiv = "<div class='member'><span class='name'><a href='" + memberlink + ranked[i].member + "%22}' target='member'>" + mymember.fullname + "</a></span>";
+           var mydiv = "<div class='member'><span class='name'><a href='" + memberlink + ranked[i].bioid + "%22}' target='member'>" + ranked[i].fullname + "</a></span>";
            //var mydiv = "<div class='member'><span class='name'><a href='" memberlink + mymember.firstname + "-" + mymember.lastname + "/" + ranked[i].member + ">" + mymember.fullname + "</a></span>";
-
            mydiv = mydiv + "<br /><span class='counts'>Sponsored: " + ranked[i].sponsored + " Cosponsored: " + ranked[i].cosponsored + "</span></div>"
            $( "#subjectresults" ).append( mydiv );
-         }
        }
    }
 

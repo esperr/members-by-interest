@@ -1,8 +1,51 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  margin-bottom: 60px;
+  }
+
+  .footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+  padding-top:1em;
+}
+
+#topbanner {
+  color: white;
+  background-color: #ed9415;
+  font-family: "Century Gothic", Helvetica, sans-serif;
+  padding-top: .8em;
+  padding-bottom: 1em;
+  }
+
+#topbanner h1 {
+  font-size:
+}
+
+#about {
+  float: right;
+  color: black;
+  background-color: white;
+  font-size: 125%;
+}
+
+#about:hover, #about:focus {
+  background-color: #E4E3D2;
+}
+
 #subjectresults .member {
   padding: .5em;
   margin: .8em;
   border-radius: .5em;
-  border: 1px solid #000;
+  border: 1px solid lightgray;
   max-width: 25em;
 }
 
@@ -13,3 +56,13 @@
 .member .counts {
   color: gray;
 }
+
+#searchoptions {
+  border: 1px solid lightgray;
+  border-radius: .5em;
+  padding: 2em;
+  font-weight: bold;
+  font-size: 1.6em;
+}
+
+.search { margin-bottom: .3em;}

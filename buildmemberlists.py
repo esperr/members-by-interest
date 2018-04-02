@@ -29,6 +29,8 @@ def walkpath( path ):
     listing = os.listdir(path)
     tree = etree.parse(path + "\\" + listing[0])
     root = tree.getroot()
+    congress = root.find('.//bill/congress').text
+    congresses.add(congress)
 
     for infile in listing:
       filepath = path + "\\" + infile
@@ -45,10 +47,16 @@ args = parser.parse_args()
 print args.filespath
 
 members = []
+congresses = set()
 
 for path in args.filespath:
     walkpath(path)
 
+if len(congresses) > 1:
+    congress = "all"
+else:
+    congress = congresses.pop()
+
 print members
-with open("members.js", 'w') as outfile:
+with open("members" + "_" + congress + ".js", 'w') as outfile:
     json.dump(members, outfile)

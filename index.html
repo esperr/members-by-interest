@@ -53,9 +53,9 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
   <div class="search">
 
-    <a id="subjecttoggle" href="#">All Members by Subject or Policy Area</a> | <a id="membertoggle" href="#">View Interests for single Member</a>
+    <a id="subjecttoggle" href="#">All Members by Policy Area</a> | <a id="membertoggle" href="#">View Interests for single Member</a>
   </div>
-
+    <!--
     <div id="togglesubject" class="btn-group btn-group-toggle" data-toggle="buttons">
       <label class="btn btn-primary btn-sm active">
         <input type="radio" name="subjecttype" value="policy" autocomplete="off" checked> Policy Area
@@ -64,6 +64,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         <input type="radio" name="subjecttype" value="subject" autocomplete="off"> Legislative Subjects
       </label>
     </div>
+  -->
   </div>
 
   <div id="results">
@@ -216,6 +217,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        }
      });
      var ranked = keysrt(interests, 'proportion', 'reverse');
+     console.log(JSON.stringify(ranked));
      var proparray = [];
      var labels = ['Subject', 'Proportion',]
      proparray.push(labels);
@@ -227,7 +229,8 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    }
 
    function getSubjects() {
-     subjecttype = $('input[name=subjecttype]:checked').val();
+     //subjecttype = $('input[name=subjecttype]:checked').val();
+     subjecttype = "policy";
      $("#subjecttypelabel").empty();
      $('#subjectlisting').empty();
      if (subjecttype == "policy") {
@@ -274,7 +277,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    }
 
    function drawchart(proparray) {
-     console.log(JSON.stringify(proparray.length));
      newHeight = proparray.length * 20;
      var divStyle = "width: 900px; height:" + String(newHeight) + "px;"
      $( "#memberresults" ).append("<div id='chart_div' style='" + divStyle +"'></div>")
@@ -331,10 +333,11 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        });
    }
    </script>
+ </div>
    <footer class="footer">
      <div class="container">
        <span class="text-muted">  <p>Design and contruction by Ed Sperr, M.L.I.S. (<a href="mailto:ed_sperr@hotmail.com">ed_sperr@hotmail.com</a>)   |
-         Data from <a href="https://www.gpo.gov/fdsys/bulkdata/BILLSTATUS">GPO</a>  |   Charting tools from  <a href="https://developers.google.com/chart/interactive/docs/gallery/barchart"> target="_blank">Google</a>
+         Data from <a href="https://www.gpo.gov/fdsys/bulkdata/BILLSTATUS">GPO</a>  |   Charting tools from  <a href="https://developers.google.com/chart/interactive/docs/gallery/barchart" target="_blank">Google Charts</a>
         | See the code at <a href="https://github.com/esperr/members-by-interest">GitHub</a></p></span>
      </div>
    </footer>

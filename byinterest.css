@@ -66,3 +66,11 @@ body {
 }
 
 .search { margin-bottom: .3em;}
+
+#results {
+  padding: 1.5em;
+}
+
+#memberresults {
+  margin-top: 1em;
+}

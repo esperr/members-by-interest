@@ -12,9 +12,16 @@
     src: url(https://fonts.gstatic.com/s/roboto/v15/Fcx7Wwv8OzT71A3E1XOAjvesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
   }
   </style>
-  <script>
-    //Google analytics script goes here!
-  </script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-433406-13"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-433406-13');
+</script>
+
 </head>
 
 <!--
@@ -53,9 +60,9 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
   <div class="search">
 
-    <a id="subjecttoggle" href="#">All Members by Policy Area</a> | <a id="membertoggle" href="#">View Interests for single Member</a>
+    <a id="subjecttoggle" href="#">All Members by Policy Area or Subject</a> | <a id="membertoggle" href="#">View Interests for single Member</a>
   </div>
-    <!--
+
     <div id="togglesubject" class="btn-group btn-group-toggle" data-toggle="buttons">
       <label class="btn btn-primary btn-sm active">
         <input type="radio" name="subjecttype" value="policy" autocomplete="off" checked> Policy Area
@@ -64,7 +71,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         <input type="radio" name="subjecttype" value="subject" autocomplete="off"> Legislative Subjects
       </label>
     </div>
-  -->
+
   </div>
 
   <div id="results">
@@ -93,7 +100,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    <script>
    var chamber = $( "#chamber option:selected" ).val();
    var congress = $( "#congress option:selected" ).val();
-   var classification = "policyareas";
    var subjecttype;
    //var type = $('input[name=searchtype]:checked').val();
 
@@ -105,7 +111,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    google.charts.load('current', {packages: ['corechart', 'bar']});
 
    //start by showing only subject search
-   $( "#membersearch" ).toggle();
+   $( "#membersearch" ).hide();
 
    $( "#subjectlisting" ).change(function() {
      memberrank();
@@ -117,14 +123,14 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    });
 
    $( "#subjecttoggle" ).click(function() {
-     $( "#membersearch" ).toggle();
-     $( "#subjectsearch" ).toggle();
+     $( "#membersearch" ).hide();
+     $( "#subjectsearch" ).show();
      //type = "subject";
    });
 
    $( "#membertoggle" ).click(function() {
-     $( "#membersearch" ).toggle();
-     $( "#subjectsearch" ).toggle();
+     $( "#membersearch" ).show();
+     $( "#subjectsearch" ).hide();
      //type = "member";
    });
 
@@ -190,14 +196,22 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        for (i=0; i<ranked.length; i++) {
            var membersearchStr = memberlink + ranked[i].firstname + "-" + ranked[i].lastname + "/" + ranked[i].bioid;
            var mydiv = "<div class='member'><span class='name'><a href='" + membersearchStr + "' target='member'>" + ranked[i].fullname + "</a></span>";
-           var billsearchParams = { "congress": congress, "subject": subject.replace(/_/g, ' ')};
+           var srchSubject = subject.replace(/_/g, ' ');
+           var srchStem = "https://www.congress.gov/advanced-search/command-line?query=";
            if (congress == "all") {
-             billsearchParams.congress = ["115","114","113"];
+             var congresspart = "congressId:[113 to 115]";
+           } else {
+             var congresspart = "congressId:"+ congress ;
            }
-           billsearchParams.sponsorship = "sponsored";
-           mydiv = mydiv + "<br /><span class='counts'>Sponsored: <a href='" + membersearchStr + "?q=" + JSON.stringify(billsearchParams) + "' target='sponsorship'>" + ranked[i].sponsored + "</a>"
-           billsearchParams.sponsorship = "cosponsored";
-           mydiv = mydiv + " Cosponsored: <a href='" + membersearchStr + "?q=" + JSON.stringify(billsearchParams) + "' target='sponsorship'>" + ranked[i].cosponsored + "</a></span></div>"
+           if (subjecttype == "policy") {
+             var subjectpart = 'billPolicyArea:"' + srchSubject + '"';
+           } else {
+             var subjectpart = 'billSubjectTerm:"' + srchSubject + '"';
+           }
+           var srchSponLink = srchStem + encodeURI(subjectpart + " AND " + congresspart + " AND " + 'billSponsor:"' + ranked[i].bioid + '"&searchResultViewType=expanded');
+           mydiv = mydiv + "<br /><span class='counts'>Sponsored: <a href='" + srchSponLink + "' target='sponsorship'>" + ranked[i].sponsored + "</a>"
+           var srchCoSponLink = srchStem + encodeURI(subjectpart + " AND " + congresspart + " AND " + 'billCosponsor:"' + ranked[i].bioid + '"&searchResultViewType=expanded');
+           mydiv = mydiv + " Cosponsored: <a href='" + srchCoSponLink + "' target='sponsorship'>" + ranked[i].cosponsored + "</a></span></div>"
            $( "#subjectresults" ).append( mydiv );
        }
    }
@@ -229,8 +243,8 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    }
 
    function getSubjects() {
-     //subjecttype = $('input[name=subjecttype]:checked').val();
-     subjecttype = "policy";
+     subjecttype = $('input[name=subjecttype]:checked').val();
+     //subjecttype = "policy";
      $("#subjecttypelabel").empty();
      $('#subjectlisting').empty();
      if (subjecttype == "policy") {

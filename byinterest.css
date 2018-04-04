@@ -41,12 +41,18 @@ body {
   background-color: #E4E3D2;
 }
 
+#subjectpicker {
+  font-size: larger;
+  margin-bottom: 1em;
+}
+
 #subjectresults .member {
-  padding: .5em;
-  margin: .8em;
+  padding: .7em 1.2em .7em .7em;
+  margin: .3em .6em .3em .3em;
   border-radius: .5em;
   border: 1px solid lightgray;
   max-width: 25em;
+  float: left;
 }
 
 #subjectresults .member a {
@@ -68,9 +74,18 @@ body {
 .search { margin-bottom: .3em;}
 
 #results {
-  padding: 1.5em;
+  padding: 1em;
 }
 
 #memberresults {
   margin-top: 1em;
+}
+
+#memberpicker {
+  font-size: larger;
+  margin-bottom: 1em;
+}
+
+#explainer {
+  float: right;
 }

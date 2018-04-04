@@ -54,8 +54,8 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
       <option value="113" selected>113</option>
       <option value="114">114</option>
       <option value="115">115</option>
-      <option value="all">113th - 115th</option>
-    </select>th congress
+      <option value="all">113-115</option>
+    </select>th Congress
   </div>
 
   <div class="search">
@@ -76,20 +76,27 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
   <div id="results">
   <div id="membersearch">
-        <label for="memberlisting">Choose a Member</label>
-      <select id="memberlisting">
-         </select>
+      <div id="memberpicker"><label for="memberlisting">Choose a Member</label>
+        <select id="memberlisting"></select>
+      </div>
          <div id="memberresults">
       </div>
     </div>
 
   <div id="subjectsearch">
     <br />
-    <label id=subjecttypelabel for="subjectlisting"></label>
-     <select id="subjectlisting">
-    </select>
+
+    <div id="subjectpicker"><label id=subjecttypelabel for="subjectlisting"></label>
+      <select id="subjectlisting"></select>
+    </div>
     <div id="subjectresults">
     </div>
+    <!--
+    <div id="explainer">
+      <p>Loerem Ipsum yada yada yada yada</p>
+      <p>More stuff goes here maybe....</p>
+    </div>
+  -->
   </div>
 </div>
 
@@ -231,7 +238,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        }
      });
      var ranked = keysrt(interests, 'proportion', 'reverse');
-     console.log(JSON.stringify(ranked));
      var proparray = [];
      var labels = ['Subject', 'Proportion',]
      proparray.push(labels);
@@ -291,14 +297,19 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    }
 
    function drawchart(proparray) {
+     var result = members.filter(function( mymember ) {
+       return mymember.bioid == member;
+     });
+     titletext = result[0].fullname;
      newHeight = proparray.length * 20;
      var divStyle = "width: 900px; height:" + String(newHeight) + "px;"
      $( "#memberresults" ).append("<div id='chart_div' style='" + divStyle +"'></div>")
-         var data = google.visualization.arrayToDataTable(proparray);
+     var data = google.visualization.arrayToDataTable(proparray);
+     var titlecongress = $( "#congress option:selected" ).text() + "th Congress";
      if (subjecttype == "subject") {
-       var titletext = "Bills by Legislative Subject";
+       titletext = titletext + ": Bills by Legislative Subject, " + titlecongress;
      } else {
-       var titletext = "Bills by Policy Area";
+       titletext = titletext + " : Bills by Policy Area, " + titlecongress;
      }
 
     var options = {

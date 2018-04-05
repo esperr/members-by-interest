@@ -132,12 +132,13 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    $( "#subjecttoggle" ).click(function() {
      $( "#membersearch" ).hide();
      $( "#subjectsearch" ).show();
-     //type = "subject";
    });
 
    $( "#membertoggle" ).click(function() {
      $( "#membersearch" ).show();
      $( "#subjectsearch" ).hide();
+     member = $( "#memberlisting option:selected" ).val();
+     topsubjects(member);
      //type = "member";
    });
 
@@ -204,20 +205,9 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
            var membersearchStr = memberlink + ranked[i].firstname + "-" + ranked[i].lastname + "/" + ranked[i].bioid;
            var mydiv = "<div class='member'><span class='name'><a href='" + membersearchStr + "' target='member'>" + ranked[i].fullname + "</a></span>";
            var srchSubject = subject.replace(/_/g, ' ');
-           var srchStem = "https://www.congress.gov/advanced-search/command-line?query=";
-           if (congress == "all") {
-             var congresspart = "congressId:[113 to 115]";
-           } else {
-             var congresspart = "congressId:"+ congress ;
-           }
-           if (subjecttype == "policy") {
-             var subjectpart = 'billPolicyArea:"' + srchSubject + '"';
-           } else {
-             var subjectpart = 'billSubjectTerm:"' + srchSubject + '"';
-           }
-           var srchSponLink = srchStem + encodeURI(subjectpart + " AND " + congresspart + " AND " + 'billSponsor:"' + ranked[i].bioid + '"&searchResultViewType=expanded');
+           var srchSponLink = buildMemberSearch(srchSubject, ranked[i].bioid, subjecttype, "billSponsor");
            mydiv = mydiv + "<br /><span class='counts'>Sponsored: <a href='" + srchSponLink + "' target='sponsorship'>" + ranked[i].sponsored + "</a>"
-           var srchCoSponLink = srchStem + encodeURI(subjectpart + " AND " + congresspart + " AND " + 'billCosponsor:"' + ranked[i].bioid + '"&searchResultViewType=expanded');
+           var srchCoSponLink = buildMemberSearch(srchSubject, ranked[i].bioid, subjecttype, "billCosponsor");
            mydiv = mydiv + " Cosponsored: <a href='" + srchCoSponLink + "' target='sponsorship'>" + ranked[i].cosponsored + "</a></span></div>"
            $( "#subjectresults" ).append( mydiv );
        }
@@ -330,7 +320,34 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     };
 
     var chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+    function selectHandler() {
+    var selectedItem = chart.getSelection()[0];
+    if (selectedItem) {
+      var chartsubject = data.getValue(selectedItem.row, 0);
+      var chartLink = buildMemberSearch(chartsubject, member, subjecttype, "billSponsorOrCosponsor");
+      window.open(chartLink,'_blank');
+     }
+    }
+
+    google.visualization.events.addListener(chart, 'select', selectHandler);
     chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+
+    function buildMemberSearch(subject, member, subjecttype, sponsorship) {
+      var srchStem = "https://www.congress.gov/advanced-search/command-line?query=";
+      if (congress == "all") {
+        var congresspart = "congressId:[113 to 115]";
+      } else {
+        var congresspart = "congressId:"+ congress ;
+      }
+      if (subjecttype == "policy") {
+        var subjectpart = 'billPolicyArea:"' + subject + '"';
+      } else {
+        var subjectpart = 'billSubjectTerm:"' + subject + '"';
+      }
+      var querybit = subjectpart + " AND " + congresspart + " AND " + sponsorship + ':"' + member + '"&searchResultViewType=expanded';
+      return srchStem + encodeURI(querybit);
     }
 
 

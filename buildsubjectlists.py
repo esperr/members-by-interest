@@ -10,65 +10,43 @@ dictSubjects = {}
 allPolicies = {}
 congresses = set()
 chambers = set()
+#test vars go here!
+testme = []
 
-def buildSubjects(subjects, sponsors, cosponsors):
-    for subitem in subjects:
-        subject = subitem.find('name').text.replace(" ","_")
-        if subject not in dictSubjects:
-            dictSubjects[subject] = {}
-        if "total" in dictSubjects[subject]:
-            dictSubjects[subject]["total"] += 1
-        else:
-            dictSubjects[subject]["total"] = 1
-        for item in sponsors:
-            bioidnode = item.find('bioguideId')
-            if bioidnode is not None:
-                bioid = bioidnode.text
-                if bioid not in dictSubjects[subject]:
-                    dictSubjects[subject][bioid] = {}
-                if "sponsored" in dictSubjects[subject][bioid]:
-                    dictSubjects[subject][bioid]["sponsored"] += 1
-                else:
-                    dictSubjects[subject][bioid]["sponsored"] = 1
-        for item in cosponsors:
-            bioidnode = item.find('bioguideId')
-            if bioidnode is not None:
-                bioid = bioidnode.text
-                if bioid not in dictSubjects[subject]:
-                    dictSubjects[subject][bioid] = {}
-                if "cosponsored" in dictSubjects[subject][bioid]:
-                    dictSubjects[subject][bioid]["cosponsored"] += 1
-                else:
-                    dictSubjects[subject][bioid]["cosponsored"] = 1
-
-def buildPolicies(policy, sponsors, cosponsors):
-    policyarea = policy.text.replace(" ","_")
-    if policyarea not in allPolicies:
-        allPolicies[policyarea] = {}
-    if "total" in allPolicies[policyarea]:
-        allPolicies[policyarea]["total"] += 1
+def addSubject(subject, sponsors, cosponsors, type):
+    if type == "policy":
+        rootdict = allPolicies
     else:
-        allPolicies[policyarea]["total"] = 1
+        rootdict = dictSubjects
+    #policyarea = policy.text.replace(" ","_")
+    if subject not in rootdict:
+        rootdict[subject] = {}
+    if "total" in rootdict[subject]:
+        rootdict[subject]["total"] += 1
+    else:
+        rootdict[subject]["total"] = 1
     for item in sponsors:
         bioidnode = item.find('bioguideId')
         if bioidnode is not None:
             bioid = bioidnode.text
-            if bioid not in allPolicies[policyarea]:
-                allPolicies[policyarea][bioid] = {}
-            if "sponsored" in allPolicies[policyarea][bioid]:
-                allPolicies[policyarea][bioid]["sponsored"] += 1
+            if bioid not in rootdict[subject]:
+                rootdict[subject][bioid] = {}
+            if "sponsored" in rootdict[subject][bioid]:
+                rootdict[subject][bioid]["sponsored"] += 1
             else:
-                allPolicies[policyarea][bioid]["sponsored"] = 1
+                rootdict[subject][bioid]["sponsored"] = 1
     for item in cosponsors:
-        bioidnode = item.find('bioguideId')
-        if bioidnode is not None:
-            bioid = bioidnode.text
-            if bioid not in allPolicies[policyarea]:
-                allPolicies[policyarea][bioid] = {}
-            if "cosponsored" in allPolicies[policyarea][bioid]:
-                allPolicies[policyarea][bioid]["cosponsored"] += 1
-            else:
-                allPolicies[policyarea][bioid]["cosponsored"] = 1
+        withdrawn = item.find('sponsorshipWithdrawnDate').text
+        if withdrawn is None:
+            bioidnode = item.find('bioguideId')
+            if bioidnode is not None:
+                bioid = bioidnode.text
+                if bioid not in rootdict[subject]:
+                    rootdict[subject][bioid] = {}
+                if "cosponsored" in rootdict[subject][bioid]:
+                    rootdict[subject][bioid]["cosponsored"] += 1
+                else:
+                    rootdict[subject][bioid]["cosponsored"] = 1
 
 def walkpath( path ):
     listing = os.listdir(path)
@@ -90,14 +68,16 @@ def walkpath( path ):
         filepath = path + "\\" + infile
         tree = etree.parse(filepath)
         root = tree.getroot()
-        allsponsors = root.findall('.//sponsors/item')
-        allcosponsors = root.findall('.//cosponsors/item')
-        allsubjects = root.findall('.//billSubjects/legislativeSubjects/item')
+        allsponsors = root.findall('.bill/sponsors/item')
+        allcosponsors = root.findall('.bill/cosponsors/item')
         policynode = root.find('.//policyArea/name')
-        if allsubjects is not None:
-            buildSubjects(allsubjects, allsponsors, allcosponsors)
         if policynode is not None:
-            buildPolicies(policynode, allsponsors, allcosponsors)
+            policy = policynode.text.replace(" ","_")
+            addSubject(policy, allsponsors, allcosponsors, "policy")
+        allsubjects = root.findall('.//billSubjects/legislativeSubjects/item')
+        for subitem in allsubjects:
+            subject = subitem.find('name').text.replace(" ","_")
+            addSubject(subject, allsponsors, allcosponsors, "legsubject")
 
 args = parser.parse_args()
 print args.filespath
@@ -115,6 +95,7 @@ if len(chambers) > 1:
 else:
     chamber = chambers.pop()
 
+print len(testme)
 with open("policyareasbymember_" + str(congress) + "_" + chamber + ".js", 'w') as outfile:
     json.dump(allPolicies, outfile)
 

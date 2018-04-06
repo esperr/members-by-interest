@@ -337,7 +337,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     function buildMemberSearch(subject, member, subjecttype, sponsorship) {
       var srchStem = "https://www.congress.gov/advanced-search/command-line?query=";
       if (congress == "all") {
-        var congresspart = "congressId:[113 to 115]";
+        var congresspart = "congressId:113 OR congressId:114 OR congressId:115";
       } else {
         var congresspart = "congressId:"+ congress ;
       }
@@ -346,7 +346,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
       } else {
         var subjectpart = 'billSubjectTerm:"' + subject + '"';
       }
-      var querybit = subjectpart + " AND " + congresspart + " AND " + sponsorship + ':"' + member + '"&searchResultViewType=expanded';
+      var querybit = "(" + subjectpart + " AND " + sponsorship + ':' + member + ") AND (" + congresspart + ")";
       return srchStem + encodeURI(querybit);
     }
 

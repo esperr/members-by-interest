@@ -76,8 +76,9 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
   <div id="results">
   <div id="membersearch">
-      <div id="memberpicker"><label for="memberlisting">Choose a Member</label>
+      <div id="memberpicker"><label for="memberlisting">Browse all Members</label>
         <select id="memberlisting"></select>
+        or <button id="membersearch-trigger" class="btn btn-primary" type="button">Search members</button>
       </div>
          <div id="memberresults">
       </div>
@@ -86,7 +87,12 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
   <div id="subjectsearch">
     <br />
 
-    <div id="subjectpicker"><label id=subjecttypelabel for="subjectlisting"></label>
+
+      <div id="showbutton">
+      <button id="subjectsearch-trigger" class="btn btn-primary" type="button">Search subjects</button>
+      or </div>
+      <div id="subjectpicker">
+      <label id=subjecttypelabel for="subjectlisting"></label>
       <select id="subjectlisting"></select>
     </div>
     <div id="subjectresults">
@@ -104,9 +110,49 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
 </div>
 </div>
+
+<div id="search-members" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="search-members">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Search for a Member</h4>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="myMemberInput" placeholder="Search for names.." title="Type in a name">
+        <ul id="memberdrop" class="dropdown"></ul>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="search-subjects" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="search-subjects">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Search for a Subject</h4>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="mySubjectInput" placeholder="Search for subject..." title="Type in a word found in a subject">
+        <ul id="subjectdrop" class="dropdown"></ul>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
    <script>
    var chamber = $( "#chamber option:selected" ).val();
    var congress = $( "#congress option:selected" ).val();
+   var subjectsarray = [];
    var subjecttype;
    //var type = $('input[name=searchtype]:checked').val();
 
@@ -119,19 +165,26 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
    //start by showing only subject search
    $( "#membersearch" ).hide();
+   $( "#showbutton" ).hide();
+
 
    $( "#subjectlisting" ).change(function() {
-     memberrank();
-   });
-
-   $( "#memberlisting" ).change(function() {
-     member = $( "#memberlisting option:selected" ).val();
-     topsubjects(member);
+     subject = $( "#subjectlisting option:selected" ).val();
+     memberrank(subject);
    });
 
    $( "#subjecttoggle" ).click(function() {
      $( "#membersearch" ).hide();
      $( "#subjectsearch" ).show();
+   });
+
+   $( "#subjectsearch-trigger" ).click(function() {
+     $( "#search-subjects" ).modal();
+   });
+
+   $( "#memberlisting" ).change(function() {
+     member = $( "#memberlisting option:selected" ).val();
+     topsubjects(member);
    });
 
    $( "#membertoggle" ).click(function() {
@@ -142,9 +195,32 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      //type = "member";
    });
 
+   $( "#membersearch-trigger" ).click(function() {
+     $( "#search-members" ).modal();
+   });
+
    $('#togglesubject input').on('change', function() {
      getSubjects();
    });
+
+   //$('#memberdrop a').on('click', function() {
+  //   alert("clicked!");
+   //});
+
+   $( "#memberdrop" ).on( "click", ".listmember", function() {
+     var member = $( this ).data("bioid");
+     topsubjects(member);
+     $( "#memberlisting" ).val(member);
+     $( "#search-members" ).modal("hide");
+    });
+
+   $( "#subjectdrop" ).on( "click", ".listsubject", function() {
+     var selectsubject = $( this ).html();
+     subject = selectsubject.replace(/ /g, '_');
+     memberrank(subject);
+     $( "#subjectlisting" ).val(subject);
+     $( "#search-subjects" ).modal("hide");
+    });
 
    $( "#congress" ).change(function() {
      congress = $( "#congress option:selected" ).val();
@@ -156,6 +232,43 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      pickMembers();
      getSubjects();
    });
+
+   $( "#myMemberInput" ).keyup(function() {
+     $( "#memberdrop" ).empty();
+     var input = $( "#myMemberInput" ).val();
+     filter = input.toUpperCase();
+     $.each(members, function(i, member)
+       {
+         if (chamber == "house" && member['district']) {
+           var matchstr = member.fullname.replace(/Rep. /, '');
+           if (matchstr.toUpperCase().indexOf(filter) > -1) {
+             $( "#memberdrop" ).append("<li><a class='listmember' href='#'>" + matchstr + "</a></li>");
+             $( ".listmember" ).last().data( "bioid", member.bioid );
+           }
+         }
+         if (chamber == "senate" && !member['district']) {
+           var matchstr = member.fullname.replace(/Sen. /, '');
+           if (matchstr.toUpperCase().indexOf(filter) > -1) {
+             $( "#memberdrop" ).append("<li><a class='listmember' href='#'>" + matchstr + "</a></li>");
+             $( ".listmember" ).last().data( "bioid", member.bioid );
+           }
+         }
+     });
+    });
+
+     $( "#mySubjectInput" ).keyup(function() {
+       $( "#subjectdrop" ).empty();
+       var input = $( "#mySubjectInput" ).val();
+       filter = input.toUpperCase();
+       $.each(subjectsarray, function(i, subject)
+         {
+             var matchstr = subject.replace(/_/g, ' ');
+             if (matchstr.toUpperCase().indexOf(filter) > -1) {
+               $( "#subjectdrop" ).append("<li><a class='listsubject' href='#'>" + matchstr + "</a></li>");
+             }
+       });
+     });
+
 
    function pickMembers() {
      $('#memberlisting').empty();
@@ -174,8 +287,8 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
    }
 
-   function memberrank() {
-     subject = $( "#subjectlisting option:selected" ).val();
+   function memberrank(subject) {
+     //subject = $( "#subjectlisting option:selected" ).val();
      var ranklist = [];
      var memberlink = "https://www.congress.gov/member/";
      $.each( allsubjects[subject], function( key, value ) {
@@ -235,10 +348,11 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        var nounder = ranked[i].subject.replace(/_/g, ' ');
        proparray.push([nounder, ranked[i].proportion]);
      }
-     drawchart(proparray);
+     drawchart(proparray, member);
    }
 
    function getSubjects() {
+     subjectsarray.length = 0;
      subjecttype = $('input[name=subjecttype]:checked').val();
      //subjecttype = "policy";
      $("#subjecttypelabel").empty();
@@ -246,26 +360,27 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      if (subjecttype == "policy") {
        var filename = filenameStem + "policyareasbymember_" + congress + "_" + chamber + ".js";
        $("#subjecttypelabel").append("Choose a Policy Area:");
+       $("#showbutton").hide();
      } else {
-       $("#subjecttypelabel").append("Choose a Legislative Subject:");
+       $("#subjecttypelabel").append("Browse all Legislative Subjects (long):");
+       $("#showbutton").show();
        var filename = filenameStem + "subjectsbymember_" + congress + "_" + chamber + ".js";
      }
      $.getJSON( filename, function( data ) {
        allsubjects = data;
-       var subjects = [];
        for (subject in allsubjects) {
-         subjects.push(subject);
-         subjects.sort();
+         subjectsarray.push(subject);
+         subjectsarray.sort();
        }
        var auxArr = [];
-       $.each(subjects, function(i, subject)
+       $.each(subjectsarray, function(i, subject)
          { var nounder = subject.replace(/_/g, ' ');
            auxArr[i] = "<option value='" + subject + "'>" + nounder + "</option>";
          });
        $('#subjectlisting').append(auxArr.join(''));
      })
      .done(function() {
-       memberrank();
+       memberrank(subjectsarray[0]);
      })
      .fail(function() {
        alert( "There was some sort of problem -- please reload the page" );
@@ -286,7 +401,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      });
    }
 
-   function drawchart(proparray) {
+   function drawchart(proparray, member) {
      var result = members.filter(function( mymember ) {
        return mymember.bioid == member;
      });
@@ -305,7 +420,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     var options = {
       chart: {
                   title: titletext,
-                  subtitle: 'Sponsored and cosponsored as proportion of all Bills',
+                  subtitle: 'Sponsored and cosponsored as proportion of all Bills for that topic',
                 },
       chartArea: {width: '50%'},
       hAxis: {

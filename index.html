@@ -381,6 +381,8 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      })
      .done(function() {
        memberrank(subjectsarray[0]);
+       member = $( "#memberlisting option:selected" ).val();
+       topsubjects(member);
      })
      .fail(function() {
        alert( "There was some sort of problem -- please reload the page" );

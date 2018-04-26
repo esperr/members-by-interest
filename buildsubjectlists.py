@@ -3,8 +3,11 @@ import argparse
 import xml.etree.ElementTree as etree
 import json
 
-parser = argparse.ArgumentParser(description='Process a list of XML files downloaded from FDSys to produce a Sankey diagram')
-parser.add_argument("filespath", help="Path to downloaded files", nargs="+")
+parser = argparse.ArgumentParser(description='''Process a list of Bill status XML files downloaded from FDSys to produce the source files for use by members-by-interest.
+        buildsubjectlists.py will generate both policyareasbymember and subjectsbymember files in one pass, but is intended to be run against statuses for *one* chamber at a time
+        (House only or Senate only). Run it against statuses for one chamber and congress to generate a file for that particular congress or against all available statuses for a chamber
+        to generate an inclusive file for all congresses. ''')
+parser.add_argument("filespath", help="Path(s) to downloaded files -- separtate multiple paths with a [space]", nargs="+")
 
 dictSubjects = {}
 allPolicies = {}

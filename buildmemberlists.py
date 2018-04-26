@@ -3,8 +3,10 @@ import argparse
 import xml.etree.ElementTree as etree
 import json
 
-parser = argparse.ArgumentParser(description='Process a list of XML files downloaded from FDSys to produce a Sankey diagram')
-parser.add_argument("filespath", help="Path to downloaded files", nargs="+")
+parser = argparse.ArgumentParser(description='''Process a list of Bill status XML files downloaded from FDSys to produce the source files for use by members-by-interest.
+        buildmemberlists.py is designed to process House and Senate Members into one file. Run it against all statuses for one congress to generate a file for that particular
+        congress or against all available statuses to generate an inclusive file for all congresses. ''')
+parser.add_argument("filespath", help="Path(s) to downloaded files -- separtate multiple paths with a [space]", nargs="+")
 
 def makememberlist( membernodes ):
   for item in membernodes:

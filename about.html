@@ -22,21 +22,20 @@
 	<div class="panel panel-default">
 	<div class="panel-body">
 		<h2>Why Members by Interest?</h2>
-    <p>Members of congress vary in many ways, from their background to their party to the types of areas they represent.
+    <p>Members of congress vary in many ways, from their background, to their party, to the types of areas they represent.
     Another important difference is that each member has their own set of personal interests that they bring to their work.</p>
     <p>One member may be very interested in farming, while another concerns herself primarily with foreign affairs. It is possible to guess at some of these interests by looking at
     geographical region or committee assignments, but a more direct route is to examine the <em>types</em> of bills that an individual member sponsors and
-    cosponsors. This is useful information not only to observers of congress, but also for citizens who are especially concerned with a given issue.</p>
+    cosponsors. This is useful information to have, not only to observers of congress, but also for citizens who are especially concerned with a given issue.</p>
     <h2>How it works</h2>
     <p>Analysts from the <a href="http://www.loc.gov/crsinfo/about/">Congressional Research Service</a> look at each bill and resolution and assign them terms from two controlled vocabularies:
       <a href="https://www.congress.gov/help/field-values/policy-area">Policy Area terms</a> and <a href="https://www.congress.gov/help/field-values/legislative-subject-terms">
-      Legislative Subject Terms</a>. The former is a broad overview of the topic of a bill (only one heading is assigned), while the latter is much more granular, though less
-      easy to browse.</p>
-    <p>Using the <a href="https://www.gpo.gov/fdsys/bulkdata/BILLSTATUS">bulk bill status system</a>, individual bills are downloaded. Then their subject and policy terms are extracted
-      and matched to member(s) sponsoring and cosponsoring each bill. The resulting data is displayed in two ways &emdash; first it is shown as ranked list of members for each subject.
-      Alternately, the user can choose to view an individual member and see the distribution of topics that they are engaged with graphed on a chart.</p>
+      Legislative Subject Terms</a>. The former is a broad overview of the topic of a bill (only one heading is assigned), while the latter is much more granular.</p>
+    <p>Using the <a href="https://www.gpo.gov/fdsys/bulkdata/BILLSTATUS">bulk bill status system</a>, information about individual bills are downloaded. Then their subject and policy terms are extracted
+      and matched to member(s) sponsoring and cosponsoring each bill. The resulting data is displayed in two ways &mdash; either as a ranked list of members for a given subject, or a graph
+      showing what an individual member is most uniquely engaged with.</p>
       <h2>Caveats</h2>
-        <p>For the sake of simplicity, only committees (and not subcommittees) are shown on the diagrams. As bill status data is manually downloaded, activity for the most recent congress may be slightly out-of-date.<p>
+        <p>As bill status data is manually downloaded, activity for the most recent congress may be slightly out-of-date.<p>
   </div>
 	</div>
 </div>
@@ -53,14 +52,14 @@
 	<div class="panel panel-default">
 	<div class="panel-body">
   	<h3>Technologies</h3>
-		<p>Members by Interest powered by <a href="http://jquery.com/">jQuery</a>. The script for analyzing bill status data is written in <a href="https://www.python.org/">Python</a>.
+		<p>Members by Interest is powered by <a href="http://jquery.com/">jQuery</a>. The script for analyzing bill status data is written in <a href="https://www.python.org/">Python</a>.
       <a href="https://developers.google.com/chart/interactive/docs/gallery/barchart">Google Charts</a>
       is used to draw the charts and responsive layout is made easier with <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
     <p>You can find the source code for this application at <a href="https://github.com/esperr/members-by-interest">GitHub</a>.</p>
 
     <h3>License</h3>
 		<p>Please note that the information provided here comes ultimately from the <a href="https://www.gpo.gov/">Government Printing Office</a>.</p>
-    <p>The code underlying this application is Public Domain, but if you use Members by Interest for publication, I'd appreciate a citation:
+    <p>The code underlying this application is in the Public Domain, but if you use Members by Interest for publication, I'd appreciate a citation:
       <blockquote>
         Sperr E. Members by Interest [Internet]. 2018 [cited <em>your_date_here</em>]. Available from http://esperr.github.io/members-by-interest/
       </blockquote>

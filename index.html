@@ -4,14 +4,6 @@
   <title>Find a Member by Interest</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="byinterest.css">
-  <style type="text/css">
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    src: url(https://fonts.gstatic.com/s/roboto/v15/Fcx7Wwv8OzT71A3E1XOAjvesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
-  }
-  </style>
   <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-433406-13"></script>
 <script>
@@ -63,6 +55,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     <a id="subjecttoggle" href="#">All Members by Policy Area or Subject</a> | <a id="membertoggle" href="#">View Interests for single Member</a>
   </div>
 
+    <!--
     <div id="togglesubject" class="btn-group btn-group-toggle" data-toggle="buttons">
       <label class="btn btn-primary btn-sm active">
         <input type="radio" name="subjecttype" value="policy" autocomplete="off" checked> Policy Area
@@ -70,8 +63,12 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
       <label class="btn btn-primary btn-sm">
         <input type="radio" name="subjecttype" value="subject" autocomplete="off"> Legislative Subjects
       </label>
+    -->
+    Subject type: <select id="subjecttype">
+        <option value="policy" selected>policy area</option>
+        <option value="subject">legislative subject</option>
+      </select>
     </div>
-
   </div>
 
   <div id="results">
@@ -149,11 +146,43 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
   </div>
 </div>
 
+<div id="sharing-link" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Share this search</h4>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="sharingUrlcontent">
+      </div>
+      <div class="modal-footer">
+        <p>Copy the link above</p>
+      </div>
+    </div>
+  </div>
+</div>
+
    <script>
+   //did the caller specify any parameters?
+   var queryDict = {};
+   if (location.search) {
+
+     location.search.substr(1).split("&").forEach(function(item) {
+         queryDict[item.split("=")[0]] = item.split("=")[1]
+     })
+     //alert(JSON.stringify(queryDict));
+     if (queryDict["congress"]) { $("#congress").val(queryDict["congress"]); }
+     if (queryDict["chamber"]) { $("#chamber").val(queryDict["chamber"]); }
+     if (queryDict["subjecttype"]) { $("#subjecttype").val(queryDict["subjecttype"]); }
+   }
+
    var chamber = $( "#chamber option:selected" ).val();
    var congress = $( "#congress option:selected" ).val();
+
    var subjectsarray = [];
    var subjecttype;
+   var currentLocation = location.hostname + location.pathname;
    //var type = $('input[name=searchtype]:checked').val();
 
    var members;
@@ -164,9 +193,14 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    google.charts.load('current', {packages: ['corechart', 'bar']});
 
    //start by showing only subject search
-   $( "#membersearch" ).hide();
-   $( "#showbutton" ).hide();
-
+   if (queryDict["member"]) {
+     $( "#membersearch" ).show();
+     $( "#subjectsearch" ).hide();
+     //topsubjects(queryDict["member"]);
+   } else {
+     $( "#membersearch" ).hide();
+     $( "#showbutton" ).hide();
+   }
 
    $( "#subjectlisting" ).change(function() {
      subject = $( "#subjectlisting option:selected" ).val();
@@ -199,9 +233,21 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      $( "#search-members" ).modal();
    });
 
-   $('#togglesubject input').on('change', function() {
-     getSubjects();
+   $( "#subjectresults" ).on( "click", ".shareLink", function() {
+      $('#sharing-link').modal();
    });
+
+   $( "#memberresults" ).on( "click", ".shareLink", function() {
+      $('#sharing-link').modal();
+   });
+
+   //$('#togglesubject input').on('change', function() {
+  //   getSubjects();
+  // });
+  $( "#subjecttype" ).change(function() {
+    subjecttype = $( "#subjecttype option:selected" ).val();
+    getSubjects();
+  });
 
    //$('#memberdrop a').on('click', function() {
   //   alert("clicked!");
@@ -314,6 +360,12 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        });
        var ranked = keysrt(ranklist, 'score', 'reverse');
        $( "#subjectresults" ).empty();
+       var chambertitle = $( "#chamber option:selected" ).text();
+       var subjectname = $( "#subjectlisting option:selected" ).text();
+       var congressname = $( "#congress option:selected" ).text();
+       var subjectrestitle = "Members of the " + congressname + "th " + chambertitle + " sorted by '" + subjectname + "'";
+       $( "#subjectresults" ).append( "<h2>" + subjectrestitle + "</h2>" );
+       $(" #subjectresults" ).append('<p>Share this search: <a href="#!" class="shareLink">Link</a></p>');
        for (i=0; i<ranked.length; i++) {
            var membersearchStr = memberlink + ranked[i].firstname + "-" + ranked[i].lastname + "/" + ranked[i].bioid;
            var mydiv = "<div class='member'><span class='name'><a href='" + membersearchStr + "' target='member'>" + ranked[i].fullname + "</a></span>";
@@ -324,11 +376,20 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
            mydiv = mydiv + " Cosponsored: <a href='" + srchCoSponLink + "' target='sponsorship'>" + ranked[i].cosponsored + "</a></span></div>"
            $( "#subjectresults" ).append( mydiv );
        }
+       var myQuerystring = "congress=" + congress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&subject=" + subject;
+       var shareUrl = currentLocation + "?" +  myQuerystring;
+       $( "#sharingUrlcontent" ).attr( "style", "width: 35em;" );
+       $( "#sharingUrlcontent" ).attr( "value", shareUrl );
    }
 
    function topsubjects(member) {
      var interests = [];
      $( "#memberresults" ).empty();
+     $(" #memberresults" ).append('<p>Share this search: <a href="#!" class="shareLink">Link</a></p>');
+     var myQuerystring = "congress=" + congress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&member=" + member;
+     var shareUrl = currentLocation + "?" +  myQuerystring;
+     $( "#sharingUrlcontent" ).attr( "style", "width: 35em;" );
+     $( "#sharingUrlcontent" ).attr( "value", shareUrl );
      $.each( allsubjects, function( key, value ) {
        var scanSubject = allsubjects[key];
        if (scanSubject[member]) {
@@ -348,12 +409,28 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        var nounder = ranked[i].subject.replace(/_/g, ' ');
        proparray.push([nounder, ranked[i].proportion]);
      }
-     drawchart(proparray, member);
+     if (google.visualization.arrayToDataTable) {
+       drawchart(proparray, member);
+      } else {
+       drawpause();
+      }
+
+      function drawpause() {
+      setTimeout(function() {
+        console.log("no!");
+        if (google.visualization.arrayToDataTable) {
+          drawchart(proparray, member);
+        } else {
+          drawpause();
+        }
+        }, 500);
+      }
    }
 
    function getSubjects() {
      subjectsarray.length = 0;
-     subjecttype = $('input[name=subjecttype]:checked').val();
+     subjecttype = $( "#subjecttype option:selected" ).val();
+     //subjecttype = $('input[name=subjecttype]:checked').val();
      //subjecttype = "policy";
      $("#subjecttypelabel").empty();
      $('#subjectlisting').empty();
@@ -380,9 +457,16 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        $('#subjectlisting').append(auxArr.join(''));
      })
      .done(function() {
-       memberrank(subjectsarray[0]);
-       member = $( "#memberlisting option:selected" ).val();
-       topsubjects(member);
+       if (queryDict["subject"]) { $("#subjectlisting").val(queryDict["subject"]); }
+       var mysubject = $( "#subjectlisting option:selected" ).val();
+       memberrank(mysubject);
+       if (queryDict["member"]) { $("#memberlisting").val(queryDict["member"]);
+          $( "#membersearch" ).show();
+          $( "#subjectsearch" ).hide();
+          topsubjects(queryDict["member"]);
+        }
+       //member = $( "#memberlisting option:selected" ).val();
+       //topsubjects(member);
      })
      .fail(function() {
        alert( "There was some sort of problem -- please reload the page" );
@@ -410,19 +494,19 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      titletext = result[0].fullname;
      newHeight = proparray.length * 20;
      var divStyle = "width: 900px; height:" + String(newHeight) + "px;"
-     $( "#memberresults" ).append("<div id='chart_div' style='" + divStyle +"'></div>")
+     $( "#memberresults" ).append("<div id='chart_div' style='" + divStyle +"'></div>");
      var data = google.visualization.arrayToDataTable(proparray);
      var titlecongress = $( "#congress option:selected" ).text() + "th Congress";
      if (subjecttype == "subject") {
-       titletext = titletext + ": Bills by Legislative Subject, " + titlecongress;
+       titletext = titletext + ": Bills and Resolutions by Legislative Subject, " + titlecongress;
      } else {
-       titletext = titletext + " : Bills by Policy Area, " + titlecongress;
+       titletext = titletext + " : Bills and Resolutions by Policy Area, " + titlecongress;
      }
 
     var options = {
       chart: {
                   title: titletext,
-                  subtitle: 'Sponsored and cosponsored as proportion of all Bills for that topic',
+                  subtitle: 'Proportion of all Bills and Resolutions sponsored and cosponsored for that topic',
                 },
       chartArea: {width: '50%'},
       hAxis: {

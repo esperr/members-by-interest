@@ -1,106 +1,135 @@
+import functools
+import logging
+import json
+#import urllib
+#import urlfetch
+import requests
+import time
+from StringIO import StringIO
+from zipfile import ZipFile
+import xml.etree.ElementTree as etree
 import os
 import argparse
-import xml.etree.ElementTree as etree
-import json
 
-parser = argparse.ArgumentParser(description='''Process a list of Bill status XML files downloaded from FDSys to produce the source files for use by members-by-interest.
-        buildsubjectlists.py will generate both policyareasbymember and subjectsbymember files in one pass, but is intended to be run against statuses for *one* chamber at a time
-        (House only or Senate only). Run it against statuses for one chamber and congress to generate a file for that particular congress or against all available statuses for a chamber
-        to generate an inclusive file for all congresses. ''')
-parser.add_argument("filespath", help="Path(s) to downloaded files -- separtate multiple paths with a [space]", nargs="+")
 
+parser = argparse.ArgumentParser(description='''Fetches and parses zipped XML Bill status files from FDSys in order to
+build the data structures for Members by Interest ''')
+parser.add_argument("congress", help="Number of congress, or 'all' for all available congresses")
+parser.add_argument("chamber", help="Chamber, 'house' or 'senate'")
+
+
+localtime = time.asctime( time.localtime(time.time()) )
+congresses = ['113', '114', '115']
+housetypes = ["hres", "hr", "hjres", "hconres"]
+housetypes2 = ["hres"]
+senatetypes = ["sres", "sjres", "sconres", "s"]
+
+testfetch = []
+allHeadings = {}
 dictSubjects = {}
 allPolicies = {}
-congresses = set()
-chambers = set()
-#test vars go here!
-testme = []
 
-def addSubject(subject, sponsors, cosponsors, type):
-    if type == "policy":
-        rootdict = allPolicies
-    else:
-        rootdict = dictSubjects
-    #policyarea = policy.text.replace(" ","_")
-    if subject not in rootdict:
-        rootdict[subject] = {}
-    if "total" in rootdict[subject]:
-        rootdict[subject]["total"] += 1
-    else:
-        rootdict[subject]["total"] = 1
-    for item in sponsors:
-        bioidnode = item.find('bioguideId')
-        if bioidnode is not None:
-            bioid = bioidnode.text
-            if bioid not in rootdict[subject]:
-                rootdict[subject][bioid] = {}
-            if "sponsored" in rootdict[subject][bioid]:
-                rootdict[subject][bioid]["sponsored"] += 1
-            else:
-                rootdict[subject][bioid]["sponsored"] = 1
-    for item in cosponsors:
-        withdrawn = item.find('sponsorshipWithdrawnDate').text
-        if withdrawn is None:
+args = parser.parse_args()
+congresschoice = args.congress
+chamber = args.chamber
+
+#congress= "113"
+#chamber = "senate"
+
+targetList = []
+if chamber == "house":
+    locationList = housetypes
+if chamber == "senate":
+    locationList = senatetypes
+
+if congresschoice == "all":
+    for location in locationList:
+        for congress in congresses:
+            zipurl = "https://www.gpo.gov/fdsys/bulkdata/BILLSTATUS/" + congress + "/" + location + "/BILLSTATUS-" + congress + "-" + location + ".zip"
+            targetList.append(zipurl)
+else:
+    for location in locationList:
+        zipurl = "https://www.gpo.gov/fdsys/bulkdata/BILLSTATUS/" + congresschoice + "/" + location + "/BILLSTATUS-" + congresschoice + "-" + location + ".zip"
+        targetList.append(zipurl)
+
+
+def fetchZips(targetList):
+    def addSubject(subject, sponsors, cosponsors, type):
+        if type == "policy":
+            rootdict = allPolicies
+        else:
+            rootdict = dictSubjects
+        #policyarea = policy.text.replace(" ","_")
+        if subject not in rootdict:
+            rootdict[subject] = {}
+        if "total" in rootdict[subject]:
+            rootdict[subject]["total"] += 1
+        else:
+            rootdict[subject]["total"] = 1
+        for item in sponsors:
             bioidnode = item.find('bioguideId')
             if bioidnode is not None:
                 bioid = bioidnode.text
                 if bioid not in rootdict[subject]:
                     rootdict[subject][bioid] = {}
-                if "cosponsored" in rootdict[subject][bioid]:
-                    rootdict[subject][bioid]["cosponsored"] += 1
+                if "sponsored" in rootdict[subject][bioid]:
+                    rootdict[subject][bioid]["sponsored"] += 1
                 else:
-                    rootdict[subject][bioid]["cosponsored"] = 1
+                    rootdict[subject][bioid]["sponsored"] = 1
+        for item in cosponsors:
+            withdrawn = item.find('sponsorshipWithdrawnDate').text
+            if withdrawn is None:
+                bioidnode = item.find('bioguideId')
+                if bioidnode is not None:
+                    bioid = bioidnode.text
+                    if bioid not in rootdict[subject]:
+                        rootdict[subject][bioid] = {}
+                    if "cosponsored" in rootdict[subject][bioid]:
+                        rootdict[subject][bioid]["cosponsored"] += 1
+                    else:
+                        rootdict[subject][bioid]["cosponsored"] = 1
 
-def walkpath( path ):
-    listing = os.listdir(path)
-    tree = etree.parse(path + "\\" + listing[0])
-    root = tree.getroot()
-    congress = root.find('.//bill/congress').text
-    billType = root.find('.//bill/billType').text
-    if billType[0] == "h" or billType[0] == "H":
-        chamber = "house"
-    if billType[0] == "s" or billType[0] == "S":
-        chamber = "senate"
-    print congress
-    congresses.add(congress)
-    print chamber
-    chambers.add(chamber)
+    def parseZip(zf):
+        for myname in zf.namelist():
+            myfile = zf.read(myname)
+            root = etree.fromstring(myfile)
+            allsponsors = root.findall('.bill/sponsors/item')
+            allcosponsors = root.findall('.bill/cosponsors/item')
+            policynode = root.find('.//policyArea/name')
+            if policynode is not None:
+                policy = policynode.text.replace(" ","_")
+                addSubject(policy, allsponsors, allcosponsors, "policy")
+            allsubjects = root.findall('.//billSubjects/legislativeSubjects/item')
+            for subitem in allsubjects:
+                subject = subitem.find('name').text.replace(" ","_")
+                addSubject(subject, allsponsors, allcosponsors, "legsubject")
+            #testfetch.append(allsponsors)
 
-    for infile in listing:
-        #print "current file is:" + infile
-        filepath = path + "\\" + infile
-        tree = etree.parse(filepath)
-        root = tree.getroot()
-        allsponsors = root.findall('.bill/sponsors/item')
-        allcosponsors = root.findall('.bill/cosponsors/item')
-        policynode = root.find('.//policyArea/name')
-        if policynode is not None:
-            policy = policynode.text.replace(" ","_")
-            addSubject(policy, allsponsors, allcosponsors, "policy")
-        allsubjects = root.findall('.//billSubjects/legislativeSubjects/item')
-        for subitem in allsubjects:
-            subject = subitem.find('name').text.replace(" ","_")
-            addSubject(subject, allsponsors, allcosponsors, "legsubject")
+    testfetch = []
+    allHeadings = {}
+    dictSubjects = {}
+    allPolicies = {}
 
-args = parser.parse_args()
-print args.filespath
+    for target in targetList:
+        try:
+            #validate_certificate = 'true'
+            result = requests.get(target)
+            if result.status_code == 200:
+                zf = ZipFile(StringIO(result.content))
+                parseZip(zf)
+            else:
+                return result.status_code
+        except urlfetch.Error:
+                logging.exception('Caught exception fetching url')
 
-for path in args.filespath:
-    walkpath(path)
+    with open("policyareasbymember_" + str(congresschoice) + "_" + chamber + ".js", 'w') as outfile:
+        json.dump(allPolicies, outfile)
 
-if len(congresses) > 1:
-    congress = "all"
-else:
-    congress = congresses.pop()
+    with open("subjectsbymember_" + str(congresschoice) + "_" + chamber + ".js", 'w') as outfile:
+        json.dump(dictSubjects, outfile)
 
-if len(chambers) > 1:
-    print "Error: there are statuses for more than one chamber!"
-else:
-    chamber = chambers.pop()
+    return "All done!"
 
-print len(testme)
-with open("policyareasbymember_" + str(congress) + "_" + chamber + ".js", 'w') as outfile:
-    json.dump(allPolicies, outfile)
 
-with open("subjectsbymember_" + str(congress) + "_" + chamber + ".js", 'w') as outfile:
-    json.dump(dictSubjects, outfile)
+writeme = fetchZips(targetList)
+print writeme

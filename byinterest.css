@@ -49,14 +49,32 @@ body {
 #subjectresults .member {
   padding: .7em 1.2em .7em .7em;
   margin: .3em .6em .3em .3em;
-  border-radius: .5em;
-  border: 1px solid lightgray;
+  #border: 1px solid lightgray;
   max-width: 25em;
   float: left;
 }
 
+#subjectresults .R {
+    border-radius: 1em;
+    border: 2px dotted #bf0300;
+}
+
+#subjectresults .D {
+    border-radius: 1em;
+    border: 2px dotted #6996ff;
+}
+
+#subjectresults .I {
+    border-radius: 1em;
+    border: 2.5px dotted #de0ad0;
+}
+
 #subjectresults .member a {
   font-weight: bold;
+}
+
+#subjectresults h2 {
+  font-family: 'Merriweather', serif;
 }
 
 .member .counts {
@@ -66,9 +84,9 @@ body {
 #searchoptions {
   border: 1px solid lightgray;
   border-radius: .5em;
-  padding: 2em;
-  font-weight: bold;
-  font-size: 1.6em;
+  padding: 1.5em;
+  font-size: 1.2em;
+  margin-bottom: 1em;
 }
 
 .search { margin-bottom: .3em;}

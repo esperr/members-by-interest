@@ -2,6 +2,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
   <title>Find a Member by Interest</title>
+  <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="byinterest.css">
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -348,7 +349,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
          });
          var mymember = (result[0]);
          if (mymember) {
-           var memberobj = { "fullname": mymember.fullname, "firstname": mymember.firstname, "lastname": mymember.lastname, "bioid": key, "score": score, "sponsored": sponsored, "cosponsored": cosponsored };
+           var memberobj = { "fullname": mymember.fullname, "firstname": mymember.firstname, "lastname": mymember.lastname, "party": mymember.party, "bioid": key, "score": score, "sponsored": sponsored, "cosponsored": cosponsored };
            if (chamber == "house" && mymember.district) {
              ranklist.push(memberobj);
            }
@@ -368,7 +369,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        $(" #subjectresults" ).append('<p>Share this search: <a href="#!" class="shareLink">Link</a></p>');
        for (i=0; i<ranked.length; i++) {
            var membersearchStr = memberlink + ranked[i].firstname + "-" + ranked[i].lastname + "/" + ranked[i].bioid;
-           var mydiv = "<div class='member'><span class='name'><a href='" + membersearchStr + "' target='member'>" + ranked[i].fullname + "</a></span>";
+           var mydiv = "<div class='member " + ranked[i].party + "'><span class='name'><a href='" + membersearchStr + "' target='member'>" + ranked[i].fullname + "</a></span>";
            var srchSubject = subject.replace(/_/g, ' ');
            var srchSponLink = buildMemberSearch(srchSubject, ranked[i].bioid, subjecttype, "billSponsor");
            mydiv = mydiv + "<br /><span class='counts'>Sponsored: <a href='" + srchSponLink + "' target='sponsorship'>" + ranked[i].sponsored + "</a>"

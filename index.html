@@ -444,7 +444,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      } else {
        myparams.subjecttype = "legsubject";
      }
-     var subjectsearchstem = "http://fetch-bill-statuses.appspot.com/subjectsearch"
+     var subjectsearchstem = "https://fetch-bill-statuses.appspot.com/subjectsearch"
      $.getJSON( subjectsearchstem, myparams )
      .done(function( data ) {
        $('#please-wait').modal('hide');
@@ -542,7 +542,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      var myparams = {};
      if (congress != "all") { myparams.congress = congress }
      myparams.member = member
-     var membersearchstem = "http://fetch-bill-statuses.appspot.com/membersearch"
+     var membersearchstem = "https://fetch-bill-statuses.appspot.com/membersearch"
      $.getJSON( membersearchstem, myparams )
      .done(function( data ) {
        $('#please-wait').modal('hide');

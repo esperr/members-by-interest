@@ -19,9 +19,8 @@ body {
 }
 
 #topbanner {
-  color: white;
-  background-color: #ed9415;
-  font-family: "Century Gothic", Helvetica, sans-serif;
+  //background-color: #ed9415;
+  font-family: 'Merriweather', serif;
   padding-top: .8em;
   padding-bottom: 1em;
   }
@@ -41,33 +40,36 @@ body {
   background-color: #E4E3D2;
 }
 
+#splashbysubject {
+  padding: .5em;
+}
+
+#splashbymember {
+  padding: .5em;
+}
+
 #subjectpicker {
   font-size: larger;
   margin-bottom: 1em;
 }
 
 #subjectresults .member {
-  padding: .7em 1.2em .7em .7em;
-  margin: .3em .6em .3em .3em;
   #border: 1px solid lightgray;
-  max-width: 25em;
-  float: left;
-}
 
+}
+/*
 #subjectresults .R {
-    border-radius: 1em;
-    border: 2px dotted #bf0300;
+  background-color: #bf0300;
 }
 
 #subjectresults .D {
-    border-radius: 1em;
-    border: 2px dotted #6996ff;
+  background-color: #6996ff;
 }
 
 #subjectresults .I {
-    border-radius: 1em;
-    border: 2.5px dotted #de0ad0;
+  background-color: #de0ad0;
 }
+*/
 
 #subjectresults .member a {
   font-weight: bold;
@@ -77,8 +79,36 @@ body {
   font-family: 'Merriweather', serif;
 }
 
+
+.member {
+  padding: 0em;
+    max-width: 25em;
+  float: left;
+  margin: .5em;
+      border-radius: .25em;
+    border: 1px solid gray;
+}
+
 .member .counts {
   color: gray;
+}
+
+.idpanel {
+  font-weight: bold;
+  padding: .5em;
+  float: left;
+}
+
+.idpanel .district {
+  font-size: smaller;
+}
+
+.namepanel {
+  background-color: white;
+  margin-right: 0em;
+  float: left;
+  padding:1em;
+  margin-left: 1em;
 }
 
 #searchoptions {
@@ -89,12 +119,43 @@ body {
   margin-bottom: 1em;
 }
 
+#splash {
+  border: 1px solid lightgray;
+  border-radius: .25em;
+  padding: 2em;
+  margin-bottom: 3em;
+}
+
+.splashpart {
+  border: 1px solid lightgray;
+  border-radius: .25em;
+  padding: .5em;
+  margin: .5em;
+}
+
+.splashpart h3 {
+  margin-top: .1em;
+}
+
+.splashpart p {
+  margin-bottom: 1.5em;
+}
+
+.loading img {
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+  
+}
+
 .search { margin-bottom: .3em;}
 
+/*
 #results {
   padding: 1em;
 }
-
+*/
 #memberresults {
   margin-top: 1em;
 }

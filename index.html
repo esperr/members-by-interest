@@ -501,7 +501,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
            var bgcolor = colorstem + scoreprop + ")";
            //var membersearchStr = memberlink + mymember["fullname"] + "/" + mymember.bioid;
            var memberQuery = "congress=" + congress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&member=" + mymember.bioid;
-           var membersearchStr = currentLocation + "?" +  memberQuery;
+           var membersearchStr = "index.html?" +  memberQuery;
            var mydiv ="<div class='member " + mymember.party + "' style='background-color: " + bgcolor + "'>"
            mydiv = mydiv + "<div class='idpanel'";
            if (scoreprop > .3) {  mydiv = mydiv + "style='color: white'"}

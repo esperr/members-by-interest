@@ -232,17 +232,21 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
          queryDict[item.split("=")[0]] = item.split("=")[1]
      });
      chamber = queryDict["chamber"];
+     $("#chamber").val(chamber);
      subjecttype = queryDict["subjecttype"];
+     $("subjecttype").val(subjecttype);
      congress = queryDict["congress"];
+     $("congress").val(congress);
      $( "#splash" ).hide();
      if (queryDict["subject"]) {
         memberrank(decodeURIComponent(queryDict["subject"]));
       }
       if (queryDict["member"]) {
+        member = queryDict["member"];
         checkdownload();
         function checkdownload() {
           if (membersarray.length > 0) {
-            topsubjects(queryDict["member"]);
+            topsubjects(member);
           } else {
             console.log("Not yet!!");
             setTimeout(checkdownload, 300);
@@ -349,13 +353,13 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    $( "#congress" ).change(function() {
      congress = $( "#congress option:selected" ).val();
      pickMembers();
-     //getMembers();
+     searchAgain();
    });
 
    $( "#chamber" ).change(function() {
      chamber = $( "#chamber option:selected" ).val();
      pickMembers();
-     //getSubjects();
+     searchAgain();
    });
 
    $( "#myMemberInput" ).keyup(function() {
@@ -384,6 +388,14 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        });
      });
 
+   function searchAgain() {
+     if ( $("#membersearch").is(":visible") ) {
+       member = $( "#memberlisting option:selected" ).val();
+       topsubjects(member);
+     } else {
+       memberrank(subject);
+     }
+   }
 
    function pickMembers() {
      $('#memberlisting').empty();
@@ -456,7 +468,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
          var sponsored = value['sponsored'] || 0;
          var originalcosponsored = value['originalcosponsored'] || 0;
          var cosponsored = value['cosponsored'] || 0;
-         var score = (sponsored*3) + (originalcosponsored*2) +  cosponsored;
+         var score = sponsored + (originalcosponsored*.2) +  (cosponsored*.1);
          var bioidmatch = membersarray.find(obj => {
            return obj.bioid === key;
          });
@@ -559,7 +571,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
          var sponsored = value['sponsored'] || 0;
          var originalcosponsored = value['originalcosponsored'] || 0;
          var cosponsored = value['cosponsored'] || 0;
-         var score = (sponsored*3) + (originalcosponsored*2) +  cosponsored;
+         var score = sponsored + (originalcosponsored*.2) +  (cosponsored*.1);
          if (congress == "all") {
            var demoninator = comparator[key]['total'];
          } else {

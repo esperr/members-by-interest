@@ -180,6 +180,20 @@ body {
   padding-left: 3em;
   padding-right: 3em;
 }
+
+.Plottitle {
+  font-size: 1.2em
+}
+
+div.tooltip {
+    position: absolute;
+    padding: 1em;
+    font: 12px sans-serif;
+    background: white;
+    border: 2px solid lightsteelblue;
+    border-radius: 8px;
+    pointer-events: none;
+}
 /*
 .dropdown {
     position: relative;

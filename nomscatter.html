@@ -47,7 +47,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
       Subject type: <select id="subjecttype">
           <option value="policy">policy area</option>
-          <option value="legsubject">legislative subject</option>
+          <option value="subject">legislative subject</option>
         </select>
         <div id="showbutton">
         <button id="subjectsearch-trigger" class="btn btn-default" type="button">Search for subject by text</button>
@@ -56,9 +56,11 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         <label class=subjecttypelabel for="subjectlisting"></label>
         <select id="subjectlisting"></select>
       </div>
-      <p>Scatterplot showing the relationship between engagement in a given topic and indeological polarization (as measured
+      <p>Scatterplot showing the relationship between engagement in a given topic (as measured by <a href="about.html#howtoadjust">adjusted score</a>) and indeological polarization (as measured
         by Dimension 1 <a href="https://voteview.com/about">DW-NOMINATE</a> scores).</p>
-        <p><em>Hover over any point to see details</em></p>
+        <p><em>Hover over any point on the chart to see more information for that member</em></p>
+        <p>Share this search: <a href="#!" class="shareLink">Link</a></p>
+
       <div id="subjectresults">
       </div>
 
@@ -67,15 +69,23 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 </div>
 
 
-<div id="main" class="row">
-  <div class="col-sm-12 col-md-12 col-lg-12">
-
-
-  <div id="results">
-
 </div>
-</div>
-</div>
+
+<div id="sharing-link" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Share this search</h4>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="sharingUrlcontent">
+      </div>
+      <div class="modal-footer">
+        <p>Copy the link above</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="please-wait" class="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -95,7 +105,8 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 </div>
 
    <script>
-   var subjecttype = "policy";
+   var subject;
+   //var subjecttype = "policy";
    var queryDict = {};
    var chamber = $( "#chamber option:selected" ).val();
    //var congress = $( "#congress option:selected" ).val();
@@ -174,23 +185,32 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        });
      });
 
+     $( "#subjectsearch" ).on( "click", ".shareLink", function() {
+        $('#sharing-link').modal();
+     });
+
    function querysearch() {
      location.search.substr(1).split("&").forEach(function(item) {
          queryDict[item.split("=")[0]] = item.split("=")[1]
      });
      if (queryDict["chamber"]) {$("#chamber").val(queryDict["chamber"])}
-     if (queryDict["subjecttype"]) {$("#subjecttype").val(queryDict["subjecttype"])}
+     if (queryDict["subjecttype"]) {
+       subjecttype = queryDict["subjecttype"];
+       $("#subjecttype").val(subjecttype);
+     }
      if (queryDict["congress"]) {$("#congress").val(queryDict["congress"])}
-     if (queryDict["subject"]) {$("#subject").val(decodeURIComponent(queryDict["subject"]))}
-     subject = $( "#subjectlisting option:selected" ).val();
+     if (queryDict["subject"]) {
+       subject = (decodeURIComponent(queryDict["subject"]));
+     }
      //window.location.replace(currentLocation);
      subjectSearch(subject);
    }
 
    function subjectSearch(subject) {
-     //subject = $( "#subjectlisting option:selected" ).val();
      $('#please-wait').modal();
-     filename = "https://fetch-bill-statuses.appspot.com/subjectsearch?chamber=" + chamber + "&subject=" + subject + "&subjecttype=" + subjecttype + "&congress=" + congress;
+     var searchsubjecttype = "policy"
+     if (subjecttype == "subject") { searchsubjecttype = "legsubject" }
+     filename = "https://fetch-bill-statuses.appspot.com/subjectsearch?chamber=" + chamber + "&subject=" + subject + "&subjecttype=" + searchsubjecttype + "&congress=" + congress;
      $.getJSON( filename, function( data ) {
 
      })
@@ -213,17 +233,32 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
            memberscore["Cosponsored"] = originalcosponsored + cosponsored;
            memberscore["Name"] = members[subjbase][i]["Fullname"];
            memberscore["Subjectscore"] = score;
+           memberscore["ID"] = i;
+           console.log(memberscore);
            memberscores.push(memberscore);
          } else {
            console.log("Problem member:" + i);
          }
-
-         //var memberscore = { "member": i, "score": score};
-         //memberscore["party"] = members[subjbase][i][congress]["Party"];
-
         });
         $('#please-wait').modal('hide');
+
         plotscores(memberscores);
+        $("#subjectlisting").val(subject);
+        var myQuerystring = "congress=" + congress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&subject=" + subject;
+        var shareUrl = currentLocation + "?" +  myQuerystring;
+        if (congress == "all") {
+          var scattercongress = congresses[congresses.length-1];
+        } else {
+          var scattercongress = congress;
+        }
+        var scatterQuerystring = "congress=" + scattercongress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&subject=" + subject;
+        var scatterUrl = "nomscatter.html?" +  scatterQuerystring;
+        $( "#sharingUrlcontent" ).attr( "style", "width: 35em;" );
+        $( "#sharingUrlcontent" ).attr( "value", shareUrl );
+        $( "#scatterURLlink" ).attr( "href", scatterUrl );
+        var ourLocation = location.pathname + scatterUrl;
+        history.replaceState({}, "No real title here", ourLocation);
+
      })
      .fail(function() {
        alert( "There was some sort of problem -- please reload the page" );
@@ -297,11 +332,12 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        });
     })
     .done(function() {
-      subject = $( "#subjectlisting option:selected" ).val();
       //did the caller specify any parameters?
       if (location.search) {
         querysearch();
       } else {
+        subjecttype = $( "#subjecttype option:selected" ).val();
+        subject = $( "#subjectlisting option:selected" ).val();
         subjectSearch(subject);
       }
 
@@ -336,7 +372,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    }
 
    function plotscores(memberscores) {
-     //console.log(memberscores);
      $("#subjectresults").empty();
      var margin = {top: 100, right: 100, bottom: 100, left: 100},
          width = graphDivWidth - margin.left - margin.right,
@@ -444,7 +479,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
             div.transition()
                 .duration(50)
                 .style("opacity", .95);
-            div	.html(d.Name + "<br/>sp:" + d.Sponsored + " co:" + d.Cosponsored)
+            div	.html(d.Name + "<br/>Sponsored: " + d.Sponsored + "</a> Cosponsored: " + d.Cosponsored)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
             })
@@ -452,10 +487,27 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
             d3.select(this)
               .attr('r', 3.5);
             div.transition()
-                .duration(300)
+                .duration(1000)
                 .style("opacity", 0);
         });
 
+   }
+
+   function buildMemberSearch(subject, member, subjecttype, sponsorship) {
+     var srchStem = "https://www.congress.gov/advanced-search/command-line?query=";
+     if (congress == "all") {
+       const myparts = congresses.map(x => "congressId:" + x);
+       var congresspart = myparts.join(' OR ');
+     } else {
+       var congresspart = "congressId:"+ congress ;
+     }
+     if (subjecttype == "policy") {
+       var subjectpart = 'billPolicyArea:"' + subject + '"';
+     } else {
+       var subjectpart = 'billSubjectTerm:"' + subject + '"';
+     }
+     var querybit = "(" + subjectpart + " AND " + sponsorship + ':' + member + ") AND (" + congresspart + ")";
+     return srchStem + encodeURI(querybit);
    }
 
    function keysrt(arr, key, reverse) {

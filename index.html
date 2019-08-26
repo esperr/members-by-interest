@@ -107,6 +107,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     </div>
 
   <div id="subjectsearch">
+    <p><em>New!</em>  View a <a id="scatterURLlink">plot of this subject</a> showing the interests of members vs their ideological positions.</p>
     <p>View <a id="membertoggle" href="#">Interests for single Member</a> instead</p>
 
     <div id="subjectpicker">
@@ -353,13 +354,17 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    $( "#congress" ).change(function() {
      congress = $( "#congress option:selected" ).val();
      pickMembers();
-     searchAgain();
+     if ($("#splash").is(":hidden")) {
+       searchAgain();
+     }
    });
 
    $( "#chamber" ).change(function() {
      chamber = $( "#chamber option:selected" ).val();
      pickMembers();
-     searchAgain();
+     if ($("#splash").is(":hidden")) {
+       searchAgain();
+     }
    });
 
    $( "#myMemberInput" ).keyup(function() {
@@ -534,8 +539,16 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        }
        var myQuerystring = "congress=" + congress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&subject=" + subject;
        var shareUrl = currentLocation + "?" +  myQuerystring;
+       if (congress == "all") {
+         var scattercongress = congresses[congresses.length-1];
+       } else {
+         var scattercongress = congress;
+       }
+       var scatterQuerystring = "congress=" + scattercongress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&subject=" + subject;
+       var scatterUrl = "nomscatter.html?" +  scatterQuerystring;
        $( "#sharingUrlcontent" ).attr( "style", "width: 35em;" );
        $( "#sharingUrlcontent" ).attr( "value", shareUrl );
+       $( "#scatterURLlink" ).attr( "href", scatterUrl );
      }
    }
 

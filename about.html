@@ -36,12 +36,11 @@
       and matched to member(s) sponsoring and cosponsoring each bill. The resulting data is displayed in two ways &mdash; either as a ranked list of members for a given subject, or a graph
       showing what an individual member is most uniquely engaged with.</p>
     <h3><a id="howtoadjust"></a>Adjusted Score</h3>
-    <p>Bills can only have one sponsor, so being that sponsor is a strong indication that one is engaged with the topic(s) addressed by that measure. By contrast, bills may have many cosponsors, some
-      (<em>original</em> cosponsors) who are noted at the time of introduction and may have had influence on the language of a measure, and others who join along the way before it leaves the committee process.
-
-      <p>For this reason, an "adjusted score" is used to rank the influence of a given member on a particular measure. Members receive one point for sponsoring a bill, 0.2 points for being an orignal cosponsor and 0.1 point
-      for being a cosponsor after a measure's introduction. It is these adjusted scores that are added together to rank members by a given subject. They are also used to
-        compare the level of a member's engagement with a topic to the number of bills introduced that address that topic. </p>
+    <p>Bills can only have one sponsor, so being that sponsor is a strong indication that one is engaged with the topic(s) addressed by that measure. By contrast, many members can cosponsor a measure, either when it's first
+      introduced (and so perhaps having some influence on a measure's language) or later as it makes its way through the committee process.
+    <p>For this reason, an "adjusted score" is used to rank the influence of a given member on a particular measure. Members receive one point for sponsoring a bill, 0.2 points for being an orignal cosponsor and 0.1 point
+      for becoming a cosponsor after a measure's introduction. It is these adjusted scores that are added together to rank members by a given subject. They are also used to
+        compare the level of a member's engagement with an individual topic to the total number of bills that address it.</p>
     <h2>Caveats</h2>
         <p>Bill status data in the format used by Members by Interest currently only exists for the 113th congress onwards. Many current members may have served earler, but activity before the 113th will not be reflected here.</p>
         <p>Bill statuses are downloaded and analyzed once per day, so counts for today may lag until then. No attempt is made to independently analyze the "aboutness" of a given bill aside from the headings
@@ -64,8 +63,8 @@
   	<h3>Technologies</h3>
 		<p>Members by Interest is powered by <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a> and <a href="http://jquery.com/">jQuery</a>. Code for analyzing bill status data and turning it into a database
       is written in <a href="https://www.python.org/">Python</a>. Data is served from that database by code running on <a href="https://cloud.google.com/appengine/">Google App Engine</a>.
-      <a href="https://developers.google.com/chart/interactive/docs/gallery/barchart">Google Charts</a>
-      is used to draw the charts and responsive layout is made easier with <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
+      <a href="https://developers.google.com/chart/interactive/docs/gallery/barchart">Google Charts</a> and <a href="https://d3js.org/">d3.js</a>
+      are used to draw the charts and responsive layout is made easier with <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
     <p>You can find the source code for <a href="https://github.com/esperr/members-by-interest">this application</a> as well as the <a href="https://github.com/esperr/fetch-bill-statuses">API it uses</a> on GitHub.</p>
 
     <h3>License</h3>

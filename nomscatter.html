@@ -234,7 +234,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
            memberscore["Name"] = members[subjbase][i]["Fullname"];
            memberscore["Subjectscore"] = score;
            memberscore["ID"] = i;
-           console.log(memberscore);
            memberscores.push(memberscore);
          } else {
            console.log("Problem member:" + i);
@@ -257,7 +256,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         $( "#sharingUrlcontent" ).attr( "value", shareUrl );
         $( "#scatterURLlink" ).attr( "href", scatterUrl );
         var ourLocation = location.pathname + scatterUrl;
-        history.replaceState({}, "No real title here", ourLocation);
+        history.replaceState({}, "No real title here", currentLocation);
 
      })
      .fail(function() {
@@ -300,7 +299,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        $("#showbutton").show();
        subjectsarray = legsubjectslist.slice(0);
      }
-     //console.log(subjectsarray);
      subjectsarray.sort();
      var auxArr = [];
      $.each(subjectsarray, function(i, subject) {
@@ -323,7 +321,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
               members[memberbase][bioid][congress]["dim1"] = score.nominate_dim1
               members[memberbase][bioid][congress]["dim2"] = score.nominate_dim2;
             }
-            //console.log(members[memberbase][bioid][congress])
           } else {
             console.log("No match for:" + bioid);
             console.log(score);

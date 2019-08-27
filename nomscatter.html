@@ -260,7 +260,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         $( "#scatterURLlink" ).attr( "href", scatterUrl );
         console.log("Pushing new state");
         var stateObj = { foo: "bar" };
-        history.pushState(stateObj, "page 2", "bar.html");
+        history.pushState(stateObj, "page 2", scatterUrl);
      })
      .fail(function() {
        alert( "There was some sort of problem -- please reload the page" );

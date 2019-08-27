@@ -258,6 +258,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         $( "#sharingUrlcontent" ).attr( "style", "width: 35em;" );
         $( "#sharingUrlcontent" ).attr( "value", shareUrl );
         $( "#scatterURLlink" ).attr( "href", scatterUrl );
+        console.log("Pushing new state");
         var stateObj = { foo: "bar" };
         history.pushState(stateObj, "page 2", "bar.html");
      })

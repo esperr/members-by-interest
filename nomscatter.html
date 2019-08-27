@@ -106,6 +106,8 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
    <script>
    var subject;
+   var congress;
+   var subjecttype;
    //var subjecttype = "policy";
    var queryDict = {};
    var chamber = $( "#chamber option:selected" ).val();
@@ -126,7 +128,9 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    $('#please-wait').modal();
    getAllMembers();
    getAllSubjects();
-
+   location.search.substr(1).split("&").forEach(function(item) {
+       queryDict[item.split("=")[0]] = item.split("=")[1]
+   });
    $( "#subjectlisting" ).change(function() {
      subject = $( "#subjectlisting option:selected" ).val();
      subjectSearch(subject);
@@ -190,9 +194,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      });
 
    function querysearch() {
-     location.search.substr(1).split("&").forEach(function(item) {
-         queryDict[item.split("=")[0]] = item.split("=")[1]
-     });
      if (queryDict["chamber"]) {$("#chamber").val(queryDict["chamber"])}
      if (queryDict["subjecttype"]) {
        subjecttype = queryDict["subjecttype"];
@@ -202,11 +203,13 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      if (queryDict["subject"]) {
        subject = (decodeURIComponent(queryDict["subject"]));
      }
-     //window.location.replace(currentLocation);
      subjectSearch(subject);
    }
 
    function subjectSearch(subject) {
+     if (!subject) {
+       subject = $( "#subject option:selected" ).val();
+     }
      $('#please-wait').modal();
      var searchsubjecttype = "policy"
      if (subjecttype == "subject") { searchsubjecttype = "legsubject" }
@@ -255,9 +258,8 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         $( "#sharingUrlcontent" ).attr( "style", "width: 35em;" );
         $( "#sharingUrlcontent" ).attr( "value", shareUrl );
         $( "#scatterURLlink" ).attr( "href", scatterUrl );
-        var ourLocation = location.pathname + scatterUrl;
-        history.replaceState({}, "No real title here", currentLocation);
-
+        var stateObj = { foo: "bar" };
+        history.pushState(stateObj, "page 2", "bar.html");
      })
      .fail(function() {
        alert( "There was some sort of problem -- please reload the page" );
@@ -279,6 +281,9 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        }
      })
      .done(function() {
+       if (!subjecttype) {
+         subjecttype = $( "#subjecttype option:selected" ).val();
+       }
        listSubjects();
      })
      .fail(function() {
@@ -287,6 +292,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    }
 
    function listSubjects() {
+     console.log(subjecttype);
      subjectsarray.length = 0;
      $(".subjecttypelabel").empty();
      $('#subjectlisting, #splashsubjectlisting').empty();

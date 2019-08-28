@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="byinterest.css">
   <!-- Global site tag (gtag.js) - Google Analytics -->
-
 </head>
 
 <!--
@@ -18,16 +17,13 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
-
   <div class="container">
-
   <div id="topbanner" class="jumbotron">
     <h1>Members by Interest</h1>
     <a id="about" class="label label-default" href="about.html">About Members by Interest</a>
   </div>
   <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12">
-
 
 <div id="searchoptions">
   <div class="search">Chamber and years:
@@ -56,10 +52,10 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         <label class=subjecttypelabel for="subjectlisting"></label>
         <select id="subjectlisting"></select>
       </div>
-      <p>Scatterplot showing the relationship between engagement in a given topic (as measured by <a href="about.html#howtoadjust">adjusted score</a>) and indeological polarization (as measured
+      <p>Scatterplot showing the relationship between a member's engagement with a given topic (as measured by <a href="about.html#howtoadjust">adjusted score</a>) and ideology (as measured
         by Dimension 1 <a href="https://voteview.com/about">DW-NOMINATE</a> scores).</p>
-        <p><em>Hover over any point on the chart to see more information for that member</em></p>
-        <p>Share this search: <a href="#!" class="shareLink">Link</a></p>
+        <p><em>Hover over any point on the chart to see details for that member.</em></p>
+        <p><a href="#!" class="shareLink">Link</a> to share this search | <a href="#!" class="backLink">Go back</a> to ranked view</p>
 
       <div id="subjectresults">
       </div>
@@ -131,6 +127,10 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    location.search.substr(1).split("&").forEach(function(item) {
        queryDict[item.split("=")[0]] = item.split("=")[1]
    });
+   if (queryDict["subjecttype"]) {
+     subjecttype = queryDict["subjecttype"];
+     $("#subjecttype").val(subjecttype);
+   }
    $( "#subjectlisting" ).change(function() {
      subject = $( "#subjectlisting option:selected" ).val();
      subjectSearch(subject);
@@ -195,10 +195,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
    function querysearch() {
      if (queryDict["chamber"]) {$("#chamber").val(queryDict["chamber"])}
-     if (queryDict["subjecttype"]) {
-       subjecttype = queryDict["subjecttype"];
-       $("#subjecttype").val(subjecttype);
-     }
      if (queryDict["congress"]) {$("#congress").val(queryDict["congress"])}
      if (queryDict["subject"]) {
        subject = (decodeURIComponent(queryDict["subject"]));
@@ -248,19 +244,19 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         $("#subjectlisting").val(subject);
         var myQuerystring = "congress=" + congress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&subject=" + subject;
         var shareUrl = currentLocation + "?" +  myQuerystring;
+        var backUrl = location.hostname + "/index.html?" + myQuerystring;
         if (congress == "all") {
           var scattercongress = congresses[congresses.length-1];
         } else {
           var scattercongress = congress;
         }
-        var scatterQuerystring = "congress=" + scattercongress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&subject=" + subject;
-        var scatterUrl = "nomscatter.html?" +  scatterQuerystring;
+        //var scatterQuerystring = "congress=" + scattercongress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&subject=" + subject;
+        //var scatterUrl = "nomscatter.html?" +  scatterQuerystring;
         $( "#sharingUrlcontent" ).attr( "style", "width: 35em;" );
         $( "#sharingUrlcontent" ).attr( "value", shareUrl );
-        $( "#scatterURLlink" ).attr( "href", scatterUrl );
-        console.log("Pushing new state");
+        $( ".backLink" ).attr( "href", backUrl );
         var stateObj = { foo: "bar" };
-        history.pushState(stateObj, "page 2", "nomscatter.html");
+        history.pushState(stateObj, "More scatterplots...", "nomscatter.html");
      })
      .fail(function() {
        alert( "There was some sort of problem -- please reload the page" );
@@ -407,7 +403,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      y.domain([0, d3.max(memberscores, function(d) { return d.Subjectscore; })]);
 
      var chambertitle = $( "#chamber option:selected" ).text();
-     var graphTitle = "Polarization vs Engagement for '" + subject + "' in the " + congress + "th " + chambertitle;
+     var graphTitle = "Ideology vs Engagement for '" + subject + "' in the " + congress + "th " + chambertitle;
 
      svg.append("text")
          .attr("y", -50)

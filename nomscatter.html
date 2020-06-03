@@ -222,23 +222,31 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
          var subjbase = "Senate";
        }
        subjectresponse = data.members;
+       //for (var key in subjectresponse) {
+      //   if (searches.hasOwnProperty(key)) {
+      //   }
+      // }
+
+
        $.each(subjectresponse, function(i, membernumbers) {
-         var sponsored = membernumbers['sponsored'] || 0;
-         var originalcosponsored = membernumbers['originalcosponsored'] || 0;
-         var cosponsored = membernumbers['cosponsored'] || 0;
-         var score = sponsored + (originalcosponsored*.2) +  (cosponsored*.1);
-         if (members[subjbase][i]) {
-           var memberscore = members[subjbase][i][congress];
-           memberscore["Sponsored"] = sponsored;
-           memberscore["Cosponsored"] = originalcosponsored + cosponsored;
-           memberscore["Name"] = members[subjbase][i]["Fullname"];
-           memberscore["Subjectscore"] = score;
-           memberscore["ID"] = i;
-           memberscores.push(memberscore);
+           var sponsored = membernumbers['sponsored'] || 0;
+           var originalcosponsored = membernumbers['originalcosponsored'] || 0;
+           var cosponsored = membernumbers['cosponsored'] || 0;
+           var score = sponsored + (originalcosponsored*.2) +  (cosponsored*.1);
+           if (members[subjbase][i]) {
+             var memberscore = members[subjbase][i][congress];
+             if (typeof memberscore !== "undefined") {
+               memberscore["Sponsored"] = sponsored;
+               memberscore["Cosponsored"] = originalcosponsored + cosponsored;
+               memberscore["Name"] = members[subjbase][i]["Fullname"];
+               memberscore["Subjectscore"] = score;
+               memberscore["ID"] = i;
+               memberscores.push(memberscore);
+             }
          } else {
            console.log("Problem member:" + i);
          }
-        });
+       });
         $('#please-wait').modal('hide');
 
         plotscores(memberscores);
@@ -255,8 +263,9 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         $( "#sharingUrlcontent" ).attr( "style", "width: 35em;" );
         $( "#sharingUrlcontent" ).attr( "value", shareUrl );
         $( "#scatterURLlink" ).attr( "href", scatterUrl );
-        var ourLocation = location.pathname + scatterUrl;
-        history.replaceState({}, "No real title here", currentLocation);
+        //var ourLocation = location.pathname + scatterUrl;
+        //history.replaceState({}, "No real title here", '');
+        //window.location.replace(currentLocation);
 
      })
      .fail(function() {

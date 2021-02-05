@@ -1,3 +1,5 @@
+#! python2
+
 import os
 import argparse
 import xml.etree.ElementTree as etree
@@ -10,8 +12,8 @@ from zipfile import ZipFile
 # from files downloaded from the Clerks' offices, and then supplements that data with sponsoring and cosponsoring members from earlier congresses.
 # This version takes no arguments, as it is scheduled to be repalced after March with an automatic process.
 
-currentcongress = "116"
-pastcongresses = ['113', '114', '115']
+currentcongress = "117"
+pastcongresses = ['108','109','110','111','112','113', '114', '115', '116']
 housetypes = ["hres", "hr", "hjres", "hconres"]
 senatetypes = ["sres", "sjres", "sconres", "s"]
 
@@ -113,7 +115,7 @@ def makememberlist( membernodes, chamber, congress ):
 members = {}
 members['House'] = {}
 members['Senate'] = {}
-members['Congresses'] = [113,114,115,116]
+members['Congresses'] = [108,109,110,111,112,113,114,115,116,117]
 grabHouse()
 grabSenate()
 housetargets = []

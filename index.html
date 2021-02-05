@@ -11,7 +11,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'UA-433406-13');
 </script>
 
@@ -354,6 +353,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    $( "#congress" ).change(function() {
      congress = $( "#congress option:selected" ).val();
      pickMembers();
+     getAllSubjects();
      if ($("#splash").is(":hidden")) {
        searchAgain();
      }
@@ -627,8 +627,10 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    }
 
    function getAllSubjects() {
-     filename = "https://fetch-bill-statuses.appspot.com/listsubjects";
-     $.getJSON( filename, function( data ) {
+     console.log(congress);
+     var myparams = { congress: congress };
+     var subjectliststem = "https://fetch-bill-statuses.appspot.com/listsubjects";
+     $.getJSON( subjectliststem, myparams, function( data ) {
        policies = data.policies;
        for (policy in policies) {
          if (policy) {

@@ -457,7 +457,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      if (congress != "all") {
        myparams['congress'] = congress
      }
-     console.log(subjecttype);
      if (subjecttype == "policy") {
        myparams.subjecttype = "policy";
      } else {
@@ -627,11 +626,13 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    }
 
    function getAllSubjects() {
-     console.log(congress);
+     policieslist.length = 0;
+     legsubjectslist.length = 0;
      var myparams = { congress: congress };
      var subjectliststem = "https://fetch-bill-statuses.appspot.com/listsubjects";
      $.getJSON( subjectliststem, myparams, function( data ) {
        policies = data.policies;
+       console.log(policies);
        for (policy in policies) {
          if (policy) {
            policieslist.push(policy)

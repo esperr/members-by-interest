@@ -3,7 +3,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
   <title>Find a Member by Interest</title>
   <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="byinterest.css">
   <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-433406-13"></script>
@@ -21,20 +21,21 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 -->
 <body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
   <div class="container">
 
   <div id="topbanner" class="jumbotron">
-    <h1>Members by Interest</h1>
-    <a id="about" class="label label-default" href="about.html">About Members by Interest</a>
+    <h1 class="display-4">Members by Interest</h1>
+    <a id="about" class="badge badge-pill badge-light" href="about.html">About Members by Interest</a>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="col">
 
-
-<div id="searchoptions">
+<div class="card mb-3">
+  <div class="card-body">
   <div class="search">Chamber and years:
 
   <select id="chamber">
@@ -46,68 +47,119 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
       <option value="all" selected>All</option>
     </select>th Congress
   </div>
-    </div>
+</div>
+</div>
+
+
   </div>
 </div>
 
 
 <div id="main" class="row">
-  <div class="col-sm-12 col-md-12 col-lg-12">
-
-
-
+  <div class="col">
 
   <div id="results">
   <div id="splash">
-    <p>This tool enables you to gain insight into what members of congress are interested in by seeing what sorts of bills they sponsor and cosponsor.
-      Bills and Resolutions are indexed using a couple of dozen broad <a href="https://www.congress.gov/help/field-values/policy-area">Policy Areas</a>
-        in addition to several hundred more narrow  <a href="https://www.congress.gov/help/field-values/legislative-subject-terms">Legislative Subject Terms</a>.
-        Sponsoring or copsponsoring a bill not only indicates support for that particular measure, but is also a powerful signal of a member's engagement
-        with the topics that the measure is intended to address.</p>
-        <p>Want to see a different chamber or a particular congress? Use the options above!</p>
 
     <div class="row">
-    <div class="col-md-6 splashpart">
-    <div id="splashbysubject">
-      <h3>View by Subject</h3>
-      <p>See how Members are ranked for a given topic or subject sorted by <a href="about.html#howtoadjust">adjusted score</a></p>
-      <label for="splashsubjecttype">Subject type:</label>
-       <select id="splashsubjecttype">
-          <option value="policy" selected>policy area</option>
-          <option value="subject">legislative subject</option>
-        </select><br />
 
-      <label class=subjecttypelabel for="splashsubjectlisting"></label>
-      <select id="splashsubjectlisting"></select>
-        or <button id="splashsubjectsearch-trigger" class="btn btn-default" type="button">Search for subject by text</button>
-      </optgroup>
-    </div>
-    </div>
+      <div class="col mb-5">
+      <div class="card mb-3">
+        <div class="card-header">
+        View by Subject
+      </div>
+        <div class="card-body">
+          <p class="card-subtitle mb-2 text-muted">See how Members are ranked for a given topic or subject sorted by <a href="about.html#howtoadjust">adjusted score</a></p>
+          <div class="form-group">
+            <label for="splashsubjecttype">Subject type:</label>
+             <select id="splashsubjecttype">
+                <option value="policy" selected>policy area</option>
+                <option value="subject">legislative subject</option>
+              </select>
+          </div>
 
-    <div class="col-md-5 splashpart">
-    <div id="splashbymember">
-      <h3>View by Member</h3>
-      <p>See the topics/subjects of the bills an individual member has sponsored or cosponsored (by <a href="about.html#howtoadjust">adjusted score</a>), ranked by the total number of bills for each subject.</p>
-      <label for="splashmemberlisting">Choose a member:</label><select id="splashmemberlisting"></select> or
-      <button id="splashmembersearch-trigger" class="btn btn-default" type="button">Search for member by text</button>
-    </div>
-    </div>
+        <div class="form-group">
+          <label class=subjecttypelabel for="splashsubjectlisting"></label>
+          <select id="splashsubjectlisting"></select>
+            or <button id="splashsubjectsearch-trigger" class="btn btn-outline-secondary mt-2 btn-sm" type="button">Search for subject by text</button>
+        </div>
+        </div>
+      </div>
 
+      <div class="card mb-10">
+        <div class="card-header">
+        View by Member
+      </div>
+        <div class="card-body">
+          <h5 class="card-title"></h5>
+          <p class="card-subtitle mb-2 text-muted">See the topics/subjects of the bills an individual member has sponsored or cosponsored (by <a href="about.html#howtoadjust">adjusted score</a>), ranked by the total number of bills for each subject.</p>
+          <p class="card-text">
+            <label for="splashmemberlisting">Choose a member:</label><select id="splashmemberlisting"></select> or
+            <button id="membersearch-trigger" class="btn btn-outline-secondary mt-2 btn-sm" type="button">Search for member by text</button>
+        </div>
+      </div>
+      </div>
+      <div class="col" style="min-width: 20em;">
+      <p>Members by Interest enables you to gain insight into what members of congress are interested in by seeing what sorts of bills they sponsor and cosponsor.
+        Bills and Resolutions are indexed using a couple of dozen broad <a href="https://www.congress.gov/help/field-values/policy-area">Policy Areas</a>
+          in addition to several hundred more narrow  <a href="https://www.congress.gov/help/field-values/legislative-subject-terms">Legislative Subject Terms</a>.
+          Sponsoring or copsponsoring a bill not only indicates support for that particular measure, but is also a powerful signal of a member's engagement
+          with the topics that the measure is intended to address.</p>
+          <p>Want to see a different chamber or one particular congress? Use the options above!</p>
+
+          <p>You can view member engagement in two different ways. You can either see all members sorted by their level of engagement with a single topic...
+            <div class="card">
+              <div class="card-body">
+                <a href="index.html?congress=all&chamber=house&subjecttype=subject&subject=Libraries" target="_blank">
+                  <img src="Libraries_Senate.png" class="img-fluid" alt="Image of Senators sorted by their engagement with the topic of 'Libraries'">
+                </a>
+            </div></div>
+          </p>
+
+          <p>Or by the areas of engagement for any single member...
+            <div class="card">
+              <div class="card-body">
+                <a href="index.html?congress=all&chamber=senate&subjecttype=policy&member=W000817" target="_blank">
+
+                <img src="Warren.png" class="img-fluid" alt="Image of topics for Sen. Warren sorted by unique engagement">
+              </a>
+          </div></div>
+          </p>
+        </div>
   </div>
 </div>
+
+
+
+
   <div id="membersearch">
-    <p>View <a id="subjecttoggle" href="#">all Members by Policy Area or Subject</a> instead</p>
+    <div class="card mb-3">
+      <div class="card-body">
+    <p>View <a id="subjecttoggle" class="btn btn-outline-primary btn-sm" href="#">all Members by Policy Area or Subject</a> instead</p>
       <div id="memberpicker"><label for="memberlisting">Browse all Members</label>
         <select id="memberlisting"></select>
-        or <button id="membersearch-trigger" class="btn btn-default" type="button">Search for member by text</button>
+        or <button id="membersearch-trigger" class="btn btn-outline-secondary mt-2 btn-sm" type="button">Search for member by text</button>
+      </div>
+      <p>Share this search: <a href="#!" id="shareLink" class="btn btn-outline-primary btn-sm">Link</a></p>
+      <div id="charttype" class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label for="charttype" class="col-form-label mr-2">Chart type:
+        </label>
+        <label class="btn btn-success active">
+          <input type="radio" name="chartoption" id="total" value="total" autocomplete="off" checked> Total
+        </label>
+        <label class="btn btn-success">
+          <input type="radio" name="chartoption" id="unique" value="unique" autocomplete="off"> Unique
+        </label>
       </div>
          <div id="memberresults">
       </div>
     </div>
+  </div>
+  </div>
 
   <div id="subjectsearch">
-    <p><em>New!</em>  View a <a id="scatterURLlink">plot of this subject</a> showing the interests of members vs their ideological positions.</p>
-    <p>View <a id="membertoggle" href="#">Interests for single Member</a> instead</p>
+    <div class="card mb-3">
+      <div class="card-body">
 
     <div id="subjectpicker">
 
@@ -116,16 +168,23 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         <option value="subject">legislative subject</option>
       </select>
       <div id="showbutton">
-      <button id="subjectsearch-trigger" class="btn btn-default" type="button">Search for subject by text</button>
+      <button id="subjectsearch-trigger" class="btn btn-outline-secondary mt-2 btn-sm" type="button">Search for subject by text</button>
       or </div>
 
       <label class=subjecttypelabel for="subjectlisting"></label>
       <select id="subjectlisting"></select>
     </div>
+    <p>View a <a id="scatterURLlink" class="btn btn-outline-primary btn-sm" href="#">plot of this subject</a> showing the interests of members vs their ideological positions.</p>
+    <p>View <a id="membertoggle" class="btn btn-outline-primary btn-sm" href="#">Interests for a single Member</a> instead</p>
+
     <div id="subjectresults">
     </div>
-
   </div>
+  </div>
+  </div>
+
+
+
 </div>
 
 </div>
@@ -138,12 +197,13 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Search for a Member</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <input type="text" id="myMemberInput" placeholder="Search for names.." title="Type in a name">
-        <ul id="memberdrop" class="dropdown"></ul>
+        <input type="text" id="myMemberInput" placeholder="Start typing to search..." title="Type in a name">
+        <ul id="memberdrop" class="dropdown">
+        </ul>
       </div>
       <div class="modal-footer">
 
@@ -157,12 +217,14 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Search for a Subject</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
       </div>
       <div class="modal-body">
-        <input type="text" id="mySubjectInput" placeholder="Search for subject..." title="Type in a word found in a subject">
-        <ul id="subjectdrop" class="dropdown"></ul>
+        <input type="text" id="mySubjectInput" placeholder="Start typing to search..." title="Type in a word found in a subject">
+        <ul id="subjectdrop" class="dropdown">
+        </ul>
       </div>
       <div class="modal-footer">
 
@@ -176,8 +238,9 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
+                <h4 class="modal-title">Share this search</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Share this search</h4>
+
       </div>
       <div class="modal-body">
         <input type="text" id="sharingUrlcontent">
@@ -208,7 +271,8 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    var subjecttype = "policy";
    var queryDict = {};
    var chamber = $( "#chamber option:selected" ).val();
-   var congress = $( "#congress option:selected" ).val();
+   //var congress = $( "#congress option:selected" ).val();
+   var congress = "all";
    var congresses;
    var legsubjects = {};
    var legsubjectslist = [];
@@ -216,6 +280,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    var policieslist = [];
    var subjectsarray = [];
    var membersarray = [];
+   var membersubjectarrays = {};
 
    var currentLocation = location.hostname + location.pathname;
 
@@ -236,7 +301,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      subjecttype = queryDict["subjecttype"];
      $("subjecttype").val(subjecttype);
      congress = queryDict["congress"];
-     $("congress").val(congress);
      $( "#splash" ).hide();
      if (queryDict["subject"]) {
         memberrank(decodeURIComponent(queryDict["subject"]));
@@ -253,7 +317,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
           }
         }
        }
-   } else {
+    } else {
      $( "#membersearch" ).hide();
      $( "#subjectsearch" ).hide();
    }
@@ -284,7 +348,11 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
    $( "#subjecttoggle" ).click(function() {
      subject = $( "#subjectlisting option:selected" ).val();
-     memberrank(subject);
+     if (subject != "none") {
+       memberrank(subject);
+     } else {
+       window.location.replace('index.html');
+     }
    });
 
    $( "#subjectsearch-trigger, #splashsubjectsearch-trigger" ).click(function() {
@@ -314,11 +382,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      $( "#search-members" ).modal();
    });
 
-   $( "#subjectresults" ).on( "click", ".shareLink", function() {
-      $('#sharing-link').modal();
-   });
-
-   $( "#memberresults" ).on( "click", ".shareLink", function() {
+   $( "#shareLink" ).click(function() {
       $('#sharing-link').modal();
    });
 
@@ -367,6 +431,13 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      }
    });
 
+   $( "#charttype" ).change(function() {
+     var mynewcharttype = $("input[name='chartoption']:checked").val();
+     drawchart(mynewcharttype);
+   });
+
+
+
    $( "#myMemberInput" ).keyup(function() {
      $( "#memberdrop" ).empty();
      var input = $( "#myMemberInput" ).val().toUpperCase();
@@ -395,8 +466,29 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
    function searchAgain() {
      if ( $("#membersearch").is(":visible") ) {
-       member = $( "#memberlisting option:selected" ).val();
-       topsubjects(member);
+       if (chamber == "house") {
+         var membersroot = members.House
+       } else {
+         var membersroot = members.Senate
+       }
+
+       if (typeof membersroot[member] === "undefined") {
+         $('#memberresults').empty();
+       } else {
+         if (congress != "all" && typeof membersroot[member][congress] === "undefined") {
+           $('#memberresults').empty();
+           $("#memberresults").append('<div class="alert alert-danger" role="alert">Nothing here -- try a different Subject or Congress</div>');
+         } else {
+           topsubjects(member);
+         }
+
+       }
+    //if (membersroot[member] != "undefined" && membersroot[member][congress] != "undefined") {
+    //     topsubjects(member);
+      //} else {
+      //  $('#memberresults').empty();
+        //member = $( "#memberlisting option:selected" ).val();
+    //  }
      } else {
        var mysubject = $( "#subjectlisting option:selected" ).val();
        memberrank(mysubject);
@@ -441,6 +533,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
        }
        auxArr[i] = "<option value='" + member['bioid'] + "'>" + mynamestr + "</option>";
       });
+      $('#memberlisting, #splashmemberlisting').append("<option value='none' selected='selected'> -- choose one -- </option>");
       $('#memberlisting, #splashmemberlisting').append(auxArr.join(''));
    }
 
@@ -486,7 +579,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
        });
        var rankedlist = keysrt(subjectscores, 'score', 'reverse');
-       console.log(rankedlist);
        showranking(subject, rankedlist);
      })
      .fail(function() {
@@ -504,7 +596,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
          var subjectrestitle = "Members of the " + congress + "th " + chambertitle + " sorted by '" + subject + "'";
        }
        $( "#subjectresults" ).append( "<h2>" + subjectrestitle + "</h2>" );
-       $(" #subjectresults" ).append('<p>Share this search: <a href="#!" class="shareLink">Link</a></p>');
+       $(" #subjectresults" ).append('<p>Share this search: <a href="#!" class="shareLink btn btn-outline-primary btn-sm">Link</a></p>');
 
        var topscore = rankedlist[0].score;
 
@@ -558,13 +650,8 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      $('#please-wait').modal();
      $( "#splash" ).hide();
      $("#memberlisting").val(member);
+     var mycharttype = "total";
      var interests = [];
-     $( "#memberresults" ).empty();
-     $(" #memberresults" ).append('<p>Share this search: <a href="#!" class="shareLink">Link</a></p>');
-     var myQuerystring = "congress=" + congress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&member=" + member;
-     var shareUrl = currentLocation + "?" +  myQuerystring;
-     $( "#sharingUrlcontent" ).attr( "style", "width: 35em;" );
-     $( "#sharingUrlcontent" ).attr( "value", shareUrl );
      var myparams = {};
      if (congress != "all") { myparams.congress = congress }
      myparams.member = member
@@ -591,22 +678,32 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
            var demoninator = comparator[key][congress];
          }
          var proportion = score / demoninator;
-         var subjectObj = { "subject": key, "proportion": proportion };
+         var subjectObj = { "subject": key, "proportion": proportion, "totalscore": score };
          if ( key != "") {
            interests.push(subjectObj);
          }
 
         });
 
-        var ranked = keysrt(interests, 'proportion', 'reverse');
+        var propranked = keysrt(interests, 'proportion', 'reverse');
+        var totalranked = keysrt(interests.slice(), 'totalscore', 'reverse');
+        var subjectarrays = {};
         var proparray = [];
-        var labels = ['Subject', 'Proportion',]
+        var totalarray = []
+        var labels = ['Subject', 'Unique Engagement',]
+        var totallabels = ['Subject', 'Total Engagement',]
         proparray.push(labels);
-        for (i=0; i<ranked.length; i++){
-          proparray.push([ranked[i].subject, ranked[i].proportion]);
+        for (i=0; i<propranked.length; i++){
+          proparray.push([propranked[i].subject, propranked[i].proportion]);
         }
+        totalarray.push(totallabels);
+        for (i=0; i<totalranked.length; i++){
+          totalarray.push([totalranked[i].subject, totalranked[i].totalscore]);
+        }
+        membersubjectarrays.proportions = proparray;
+        membersubjectarrays.totals = totalarray;
         if (google.visualization.arrayToDataTable) {
-          drawchart(proparray, member);
+          drawchart(mycharttype);
          } else {
           drawpause();
          }
@@ -615,7 +712,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
          setTimeout(function() {
            console.log("no!");
            if (google.visualization.arrayToDataTable) {
-             drawchart(proparray, member);
+             drawchart(mycharttype);
            } else {
              drawpause();
            }
@@ -632,7 +729,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      var subjectliststem = "https://fetch-bill-statuses.appspot.com/listsubjects";
      $.getJSON( subjectliststem, myparams, function( data ) {
        policies = data.policies;
-       console.log(policies);
        for (policy in policies) {
          if (policy) {
            policieslist.push(policy)
@@ -670,6 +766,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      $.each(subjectsarray, function(i, subject) {
          auxArr[i] = "<option value='" + subject + "'>" + subject + "</option>";
        });
+     $('#subjectlisting, #splashsubjectlisting').append("<option value='none' selected='selected'> -- choose one -- </option>");
      $('#subjectlisting, #splashsubjectlisting').append(auxArr.join(''));
    }
 
@@ -733,39 +830,68 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         });
         $('#congress').append(auxArr.join(''));
        //getSubjects();
+       $( "#congress" ).val( congress );
      })
      .fail(function() {
        alert( "There was some sort of problem -- please reload the page" );
      });
    }
 
-   function drawchart(proparray, member) {
+   function drawchart(mycharttype) {
+     if (mycharttype == "unique") {
+       var ranking = membersubjectarrays.proportions;
+     } else {
+       var ranking = membersubjectarrays.totals;
+     }
+     $( "#memberresults" ).empty();
+     var myQuerystring = "congress=" + congress + "&chamber=" + chamber + "&subjecttype=" + subjecttype + "&member=" + member;
+     var shareUrl = currentLocation + "?" +  myQuerystring;
+     $( "#sharingUrlcontent" ).attr( "style", "width: 35em;" );
+     $( "#sharingUrlcontent" ).attr( "value", shareUrl );
+
      if (chamber == "house") {
+       var titletext = "Rep. "
        var membersroot = members.House;
      } else {
+       var titletext = "Sen. "
        var membersroot = members.Senate;
      }
-     titletext = membersroot[member].Fullname;
-     newHeight = proparray.length * 20;
+
+     var memberkeys = Object.keys(membersroot[member]).sort();
+
+     titletext = titletext + membersroot[member].Fullname;
+     if (mycharttype == "unique") {
+       $(" #memberresults" ).append('<h3 class="mb-4">What '+ titletext + ' is most <em>uniquely</em> engaged with</h3>');
+     } else {
+       $(" #memberresults" ).append('<h3 class="mb-4">What '+ titletext + ' spends <em>most</em> of their engagement on</h3>');
+     }
+     newHeight = ranking.length * 20;
+     if (newHeight < 350) { newHeight = 350 }
      var divStyle = "width: 900px; height:" + String(newHeight) + "px;"
      $( "#memberresults" ).append("<div id='chart_div' style='" + divStyle +"'></div>");
-     var data = google.visualization.arrayToDataTable(proparray);
+     var data = google.visualization.arrayToDataTable(ranking);
      if (subjecttype == "subject") {
        titletext = titletext + ": Bills and Resolutions by Legislative Subject";
      } else {
        titletext = titletext + " : Bills and Resolutions by Policy Area";
      }
      if (congress != "all") { titletext = titletext + ", " + congress + "th Congress"}
-     else { titletext = titletext + ", " + congresses[0] + " through " + congresses[congresses.length-1] + "th Congresses"}
+     else { titletext = titletext + ", " + memberkeys[0] + "th through " + memberkeys[memberkeys.length-3] + "th Congresses"}
+     if (mycharttype == "unique") {
+       var mysubtitle = 'Engagement scores divided by all Bills and Resolutions for that topic';
+     } else {
+       var mysubtitle = 'Total engagement scores by topic'
+     }
 
     var options = {
       chart: {
                   title: titletext,
-                  subtitle: 'Weighted score divided by all Bills and Resolutions sponsored and cosponsored for that topic',
+                  subtitle: mysubtitle,
+
                 },
       chartArea: {width: '50%'},
       hAxis: {
-        title: 'Proportion',
+        title: 'Engagement',
         minValue: 0
       },
       vAxis: {

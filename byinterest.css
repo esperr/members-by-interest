@@ -19,14 +19,15 @@ body {
 }
 
 #topbanner {
-  //background-color: #ed9415;
-  font-family: 'Merriweather', serif;
+  background-color: #718ea6;
+  color: white;
+
   padding-top: .8em;
   padding-bottom: 1em;
   }
 
 #topbanner h1 {
-  font-size:
+  font-family: 'Merriweather', serif;
 }
 
 #about {
@@ -49,7 +50,6 @@ body {
 }
 
 #subjectpicker {
-  font-size: larger;
   margin-bottom: 1em;
 }
 
@@ -146,7 +146,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   width: 40%;
-  
+
 }
 
 .search { margin-bottom: .3em;}
@@ -175,12 +175,12 @@ body {
     max-height: 30em;
     overflow-y: auto;
 }
-
+/*
 .aboutleft .panel-body {
   padding-left: 3em;
   padding-right: 3em;
 }
-
+*/
 .Plottitle {
   font-size: 1.2em
 }
@@ -193,6 +193,10 @@ div.tooltip {
     border: 2px solid lightsteelblue;
     border-radius: 8px;
     pointer-events: none;
+}
+
+#charttype {
+  float: right;
 }
 /*
 .dropdown {

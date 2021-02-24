@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
 <link href="byinterest.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
 <title>About Members by Interest</title>
 </head>
@@ -14,14 +14,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 <div class="container">
 <div id="topbanner" class="jumbotron">
-	<h1>About Members by Interest</h1>
-	<a id="about" class="label label-default" href="index.html">Home</a>
+	<h1 class="display-4">About Members by Interest</h1>
+	<a id="about" class="badge badge-pill badge-light" href="index.html">Home</a>
 </div>
    <div class="row">
 
-<div class="col-sm-7 col-md-7 col-lg-7 aboutleft">
-	<div class="panel panel-default">
-	<div class="panel-body">
+<div class="col-7">
+	<div class="card">
+	<div class="card-body">
 		<h2>Why Members by Interest?</h2>
     <p>Members of congress vary in many ways, from their background, to their party, to the types of areas they represent.
     Another important difference is that each member has their own set of personal interests that they bring to their work.</p>
@@ -34,32 +34,32 @@
       Legislative Subject Terms</a>. The former is a broad overview of the topic of a bill (only one heading is assigned), while the latter is much more granular.</p>
     <p>Using the <a href="https://www.gpo.gov/fdsys/bulkdata/BILLSTATUS">bulk bill status system</a>, information about individual bills are downloaded. Then their subject and policy terms are extracted
       and matched to member(s) sponsoring and cosponsoring each bill. The resulting data is displayed in two ways &mdash; either as a ranked list of members for a given subject, or a graph
-      showing what an individual member is most uniquely engaged with.</p>
+      showing what an individual member is most engaged with.</p>
     <h3><a id="howtoadjust"></a>Adjusted Score</h3>
     <p>Bills can only have one sponsor, so being that sponsor is a strong indication that one is engaged with the topic(s) addressed by that measure. By contrast, many members can cosponsor a measure, either when it's first
       introduced (and so perhaps having some influence on a measure's language) or later as it makes its way through the committee process.
     <p>For this reason, an "adjusted score" is used to rank the influence of a given member on a particular measure. Members receive one point for sponsoring a bill, 0.2 points for being an orignal cosponsor and 0.1 point
       for becoming a cosponsor after a measure's introduction. It is these adjusted scores that are added together to rank members by a given subject. They are also used to
-        compare the level of a member's engagement with an individual topic to the total number of bills that address it.</p>
+        define the level of a member's engagement with an individual topic.</p>
     <h2>Caveats</h2>
-        <p>Bill status data in the format used by Members by Interest currently only exists for the 113th congress onwards. Many current members may have served earler, but activity before the 113th will not be reflected here.</p>
+        <p><a href="https://www.govinfo.gov/bulkdata/BILLSTATUS">Bill status data</a> in the format used by Members by Interest currently only exists for the <a href="https://en.wikipedia.org/wiki/108th_United_States_Congress">108th congress</a> onwards. There are current members who started their service before, but activity earlier than the 108th will not be reflected here.</p>
         <p>Bill statuses are downloaded and analyzed once per day, so counts for today may lag until then. No attempt is made to independently analyze the "aboutness" of a given bill aside from the headings
           assigned by CRS.<p>
   </div>
 	</div>
 </div>
 
-<div class="col-sm-5 col-md-5 col-lg-5">
- <div class="panel panel-default">
-<div class="panel-body">
+<div class="col">
+ <div class="card mb-3">
+<div class="card-body">
 <h3>Contact</h3>
 <p>Members by Interest is a project of Ed Sperr, M.L.I.S.</p>
 <p>Ed can be reached at <a href="mailto:ed_sperr@hotmail.com">ed_sperr@hotmail.com</a> or <a href="mailto:esperr@uga.edu">esperr@uga.edu</a>.</p>
       </div>
    </div>
 
-	<div class="panel panel-default">
-	<div class="panel-body">
+	<div class="card mb-3">
+	<div class="card-body">
   	<h3>Technologies</h3>
 		<p>Members by Interest is powered by <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a> and <a href="http://jquery.com/">jQuery</a>. Code for analyzing bill status data and turning it into a database
       is written in <a href="https://www.python.org/">Python</a>. Data is served from that database by code running on <a href="https://cloud.google.com/appengine/">Google App Engine</a>.
@@ -80,8 +80,8 @@
 
 
 
-  <div class="panel panel-default">
-  <div class="panel-body">
+  <div class="card">
+  <div class="card-body">
     <h2>See also...</h2>
     <p>Want to have even more fun with visualization of congressional data? Check out <a href="https://esperr.github.io/committee-flow/">
       Committee Flow</a> and <a href="https://esperr.github.io/congress-by-year/">Congress by Year</a></p>

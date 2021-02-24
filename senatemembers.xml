@@ -1,17 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<contact_information><member>        
-        <member_full>Alexander (R-TN)</member_full>
-        <last_name>Alexander</last_name>
-        <first_name>Lamar</first_name>
-        <party>R</party>
-        <state>TN</state>
-        <address>455 Dirksen Senate Office Building Washington DC 20510</address>
-        <phone>(202) 224-4944</phone>
-        <email>http://www.alexander.senate.gov/public/index.cfm?p=Email</email>
-        <website>http://www.alexander.senate.gov/</website>
-        <class>Class II</class>
-        <bioguide_id>A000360</bioguide_id>
-    </member><member>
+<?xml version="1.0" encoding="UTF-8"?><contact_information><member>
         <member_full>Baldwin (D-WI)</member_full>
         <last_name>Baldwin</last_name>
         <first_name>Tammy</first_name>
@@ -55,7 +42,7 @@
         <state>TN</state>
         <address>357 Dirksen Senate Office Building Washington DC 20510</address>
         <phone>(202) 224-3344</phone>
-        <email>https://www.blackburn.senate.gov/contact_marsha</email>
+        <email>https://www.blackburn.senate.gov/email-me</email>
         <website>https://www.blackburn.senate.gov</website>
         <class>Class I</class>
         <bioguide_id>B001243</bioguide_id>
@@ -273,7 +260,7 @@
         <address>326 Russell Senate Office Building Washington DC 20510
         </address>
         <phone>(202) 224-2353</phone>
-        <email>http://www.cotton.senate.gov/?p=contact</email>
+        <email>https://www.cotton.senate.gov/contact/contact-tom</email>
         <website>http://www.cotton.senate.gov</website>
         <class>Class II</class>
         <bioguide_id>C001095</bioguide_id>
@@ -285,7 +272,7 @@
         <state>ND</state>
         <address>400 Russell Senate Office Building Washington DC 20510</address>
         <phone>(202) 224-2043</phone>
-        <email>https://www.cramer.senate.gov/contact_kevin</email>
+        <email>https://www.cramer.senate.gov/contact/contact-kevin</email>
         <website>https://www.cramer.senate.gov</website>
         <class>Class I</class>
         <bioguide_id>C001096</bioguide_id>
@@ -351,18 +338,6 @@
         <bioguide_id>D000563</bioguide_id>
         <leadership_position>Whip</leadership_position>
     </member><member>
-        <member_full>Enzi (R-WY)</member_full>
-        <last_name>Enzi</last_name>
-        <first_name>Michael B.</first_name>
-        <party>R</party>
-        <state>WY</state>
-        <address>379A Russell Senate Office Building Washington DC 20510</address>
-        <phone>(202) 224-3424</phone>
-        <email>http://www.enzi.senate.gov/public/index.cfm/contact?p=e-mail-senator-enzi</email>
-        <website>http://www.enzi.senate.gov</website>
-        <class>Class II</class>
-        <bioguide_id>E000285</bioguide_id>
-    </member><member>
         <member_full>Ernst (R-IA)</member_full>
         <last_name>Ernst</last_name>
         <first_name>Joni</first_name>
@@ -398,18 +373,6 @@
         <website>http://www.fischer.senate.gov</website>
         <class>Class I</class>
         <bioguide_id>F000463</bioguide_id>
-    </member><member>
-        <member_full>Gardner (R-CO)</member_full>
-        <last_name>Gardner</last_name>
-        <first_name>Cory</first_name>
-        <party>R</party>
-        <state>CO</state>
-        <address>354 Russell Senate Office Building Washington DC 20510</address>
-        <phone>(202) 224-5941</phone>
-        <email>https://www.gardner.senate.gov/contact-cory/email-cory</email>
-        <website>http://www.gardner.senate.gov</website>
-        <class>Class II</class>
-        <bioguide_id>G000562</bioguide_id>
     </member><member>
         <member_full>Gillibrand (D-NY)</member_full>
         <last_name>Gillibrand</last_name>
@@ -447,18 +410,18 @@
         <class>Class III</class>
         <bioguide_id>G000386</bioguide_id>
         <leadership_position>President Pro Tempore</leadership_position>
-    </member><member>
-        <member_full>Harris (D-CA)</member_full>
-        <last_name>Harris</last_name>
-        <first_name>Kamala D.</first_name>
-        <party>D</party>
-        <state>CA</state>
-        <address>112 Hart Senate Office Building Washington DC 20510</address>
-        <phone>(202) 224-3553</phone>
-        <email>https://www.harris.senate.gov/contact</email>
-        <website>http://www.harris.senate.gov</website>
-        <class>Class III</class>
-        <bioguide_id>H001075</bioguide_id>
+    </member><member>        
+        <member_full>Hagerty (R-TN)</member_full>
+        <last_name>Hagerty</last_name>
+        <first_name>Bill</first_name>
+        <party>R</party>
+        <state>TN</state>
+        <address>B11 Russell Senate Office Building Washington DC 20510</address>
+        <phone>(202) 224-4944</phone>
+        <email>https://www.hagerty.senate.gov</email>
+        <website>https://www.hagerty.senate.gov</website>
+        <class>Class II</class>
+        <bioguide_id>H000601</bioguide_id>
     </member><member>
         <member_full>Hassan (D-NH)</member_full>
         <last_name>Hassan</last_name>
@@ -495,6 +458,18 @@
         <website>http://www.heinrich.senate.gov/</website>
         <class>Class I</class>
         <bioguide_id>H001046</bioguide_id>
+    </member><member>
+        <member_full>Hickenlooper (D-CO)</member_full>
+        <last_name>Hickenlooper</last_name>
+        <first_name>John W.</first_name>
+        <party>D</party>
+        <state>CO</state>
+        <address>B85 Russell Senate Office Building Washington DC 20510</address>
+        <phone>(202) 224-5941</phone>
+        <email>https://www.hickenlooper.senate.gov</email>
+        <website>https://www.hickenlooper.senate.gov</website>
+        <class>Class II</class>
+        <bioguide_id>H000273</bioguide_id>
     </member><member>
         <member_full>Hirono (D-HI)</member_full>
         <last_name>Hirono</last_name>
@@ -556,18 +531,6 @@
         <class>Class III</class>
         <bioguide_id>J000293</bioguide_id>
     </member><member>
-        <member_full>Jones (D-AL)</member_full>
-        <last_name>Jones</last_name>
-        <first_name>Doug</first_name>
-        <party>D</party>
-        <state>AL</state>
-        <address>330 Hart Senate Office Building Washington DC 20510</address>
-        <phone>(202) 224-4124</phone>
-        <email>https://www.jones.senate.gov/content/contact-senator</email>
-        <website>https://www.jones.senate.gov</website>
-        <class>Class II</class>
-        <bioguide_id>J000300</bioguide_id>
-    </member><member>
         <member_full>Kaine (D-VA)</member_full>
         <last_name>Kaine</last_name>
         <first_name>Tim</first_name>
@@ -579,6 +542,18 @@
         <website>http://www.kaine.senate.gov/</website>
         <class>Class I</class>
         <bioguide_id>K000384</bioguide_id>
+    </member><member>
+        <member_full>Kelly (D-AZ)</member_full>
+        <last_name>Kelly</last_name>
+        <first_name>Mark</first_name>
+        <party>D</party>
+        <state>AZ</state>
+        <address>B40B Dirksen Senate Office Building Washington DC 20510</address>
+        <phone>202-224-2235</phone>
+        <email>https://www.kelly.senate.gov</email>
+        <website>https://www.kelly.senate.gov</website>         
+        <class>Class III</class>
+        <bioguide_id>K000377</bioguide_id>
     </member><member>
         <member_full>Kennedy (R-LA)</member_full>
         <last_name>Kennedy</last_name>
@@ -652,17 +627,29 @@
         <class>Class III</class>
         <bioguide_id>L000577</bioguide_id>
     </member><member>
-        <member_full>Loeffler (R-GA)</member_full>
-        <last_name>Loeffler</last_name>
-        <first_name>Kelly</first_name>
+        <member_full>Luján (D-NM)</member_full>
+        <last_name>Luján</last_name>
+        <first_name>Ben Ray</first_name>
+        <party>D</party>
+        <state>NM</state>
+        <address>B40C Dirksen Senate Office Building Washington DC 20510</address>
+        <phone>(202) 224-6621</phone>
+        <email>https://www.lujan.senate.gov</email>
+        <website>https://www.lujan.senate.gov</website>
+        <class>Class II</class>
+        <bioguide_id>L000570</bioguide_id>
+    </member><member>
+        <member_full>Lummis (R-WY)</member_full>
+        <last_name>Lummis</last_name>
+        <first_name>Cynthia M.</first_name>
         <party>R</party>
-        <state>GA</state>
-        <address>131 Russell Senate Office Building Washington DC 20510</address>
-        <phone>(202) 224-3643</phone>
-        <email>https://www.loeffler.senate.gov</email>
-        <website>https://www.loeffler.senate.gov</website>
-        <class>Class III</class>
-        <bioguide_id>L000594</bioguide_id>
+        <state>WY</state>
+        <address>G12 Dirksen Senate Office Building Washington DC 20510</address>
+        <phone>(202) 224-3424</phone>
+        <email>https://www.lummis.senate.gov</email>
+        <website>https://www.lummis.senate.gov</website>
+        <class>Class II</class>
+        <bioguide_id>L000571</bioguide_id>
     </member><member>
         <member_full>Manchin (D-WV)</member_full>
         <last_name>Manchin</last_name>
@@ -685,9 +672,21 @@
         </address>
         <phone>(202) 224-2742</phone>
         <email>https://www.markey.senate.gov/contact</email>
-        <website>http://www.markey.senate.gov/</website>
+        <website>http://www.markey.senate.gov</website>
         <class>Class II</class>
         <bioguide_id>M000133</bioguide_id>
+    </member><member>
+        <member_full>Marshall (R-KS)</member_full>
+        <last_name>Marshall</last_name>
+        <first_name>Roger, M.D.</first_name>
+        <party>R</party>
+        <state>KS</state>
+        <address>B33 Russell Senate Office Building Washington DC 20510</address>
+        <phone>(202) 224-4774</phone>
+        <email>https://www.marshall.senate.gov</email>
+        <website>https://www.marshall.senate.gov</website>
+        <class>Class II</class>
+        <bioguide_id>M001198</bioguide_id>
     </member><member>
         <member_full>McConnell (R-KY)</member_full>
         <last_name>McConnell</last_name>
@@ -701,18 +700,6 @@
         <class>Class II</class>
         <bioguide_id>M000355</bioguide_id>
         <leadership_position>Majority Leader</leadership_position>
-    </member><member>
-        <member_full>McSally (R-AZ)</member_full>
-        <last_name>McSally</last_name>
-        <first_name>Martha</first_name>
-        <party>R</party>
-        <state>AZ</state>
-        <address>404 Russell Senate Office Building Washington DC 20510</address>
-        <phone>202-224-2235</phone>
-        <email>https://www.mcsally.senate.gov/contact_martha</email>
-        <website>https://www.mcsally.senate.gov</website>         
-        <class>Class III</class>
-        <bioguide_id>M001197</bioguide_id>
     </member><member>
         <member_full>Menendez (D-NJ)</member_full>
         <last_name>Menendez</last_name>
@@ -787,6 +774,30 @@
         <bioguide_id>M001111</bioguide_id>
         <leadership_position>Assistant Democratic Leader</leadership_position>
     </member><member>
+        <member_full>Ossoff (D-GA)</member_full>
+        <last_name>Ossoff</last_name>
+        <first_name>Jon</first_name>
+        <party>D</party>
+        <state>GA</state>
+        <address>825 B&amp;C Hart Senate Office Building Washington DC 20510</address>
+        <phone>(202) 224-3521</phone>
+        <email/>
+        <website>/senators/117thCongress/ossoff-jon.htm</website>
+        <class>Class II</class>
+        <bioguide_id>O000174</bioguide_id>
+    </member><member>
+        <member_full>Padilla (D-CA)</member_full>
+        <last_name>Padilla</last_name>
+        <first_name>Alex</first_name>
+        <party>D</party>
+        <state>CA</state>
+        <address>B03 Russell Senate Office Building Washington DC 20510</address>
+        <phone>(202) 224-3553</phone>
+        <email/>
+        <website>/senators/117thCongress/padilla-alex.htm</website>
+        <class>Class III</class>
+        <bioguide_id>P000145</bioguide_id>
+    </member><member>
         <member_full>Paul (R-KY)</member_full>
         <last_name>Paul</last_name>
         <first_name>Rand</first_name>
@@ -798,18 +809,6 @@
         <website>http://www.paul.senate.gov</website>
         <class>Class III</class>
         <bioguide_id>P000603</bioguide_id>
-    </member><member>
-        <member_full>Perdue (R-GA)</member_full>
-        <last_name>Perdue</last_name>
-        <first_name>David</first_name>
-        <party>R</party>
-        <state>GA</state>
-        <address>455 Russell Senate Office Building Washington DC 20510</address>
-        <phone>(202) 224-3521</phone>
-        <email>https://www.perdue.senate.gov/connect/email</email>
-        <website>http://www.perdue.senate.gov</website>
-        <class>Class II</class>
-        <bioguide_id>P000612</bioguide_id>
     </member><member>
         <member_full>Peters (D-MI)</member_full>
         <last_name>Peters</last_name>
@@ -858,18 +857,6 @@
         <website>http://www.risch.senate.gov</website>
         <class>Class II</class>
         <bioguide_id>R000584</bioguide_id>
-    </member><member>
-        <member_full>Roberts (R-KS)</member_full>
-        <last_name>Roberts</last_name>
-        <first_name>Pat</first_name>
-        <party>R</party>
-        <state>KS</state>
-        <address>109 Hart Senate Office Building Washington DC 20510</address>
-        <phone>(202) 224-4774</phone>
-        <email>https://www.roberts.senate.gov/public/?p=EmailPat</email>
-        <website>http://www.roberts.senate.gov/</website>
-        <class>Class II</class>
-        <bioguide_id>R000307</bioguide_id>
     </member><member>
         <member_full>Romney (R-UT)</member_full>
         <last_name>Romney</last_name>
@@ -1087,7 +1074,7 @@
         <website>http://www.thune.senate.gov/</website>
         <class>Class III</class>
         <bioguide_id>T000250</bioguide_id>
-        <leadership_position>Assistant Majority Leader</leadership_position>
+        <leadership_position>Majority Whip</leadership_position>
     </member><member>
         <member_full>Tillis (R-NC)</member_full>
         <last_name>Tillis</last_name>
@@ -1113,17 +1100,17 @@
         <class>Class III</class>
         <bioguide_id>T000461</bioguide_id>
     </member><member>
-        <member_full>Udall (D-NM)</member_full>
-        <last_name>Udall</last_name>
-        <first_name>Tom</first_name>
-        <party>D</party>
-        <state>NM</state>
-        <address>531 Hart Senate Office Building Washington DC 20510</address>
-        <phone>(202) 224-6621</phone>
-        <email>https://www.tomudall.senate.gov/?p=contact</email>
-        <website>http://www.tomudall.senate.gov</website>
+        <member_full>Tuberville (R-AL)</member_full>
+        <last_name>Tuberville</last_name>
+        <first_name>Tommy</first_name>
+        <party>R</party>
+        <state>AL</state>
+        <address>B40A Dirksen Senate Office Building Washington DC 20510</address>
+        <phone>(202) 224-4124</phone>
+        <email>https://www.tuberville.senate.gov</email>
+        <website>https://www.tuberville.senate.gov</website>
         <class>Class II</class>
-        <bioguide_id>U000039</bioguide_id>
+        <bioguide_id>T000278</bioguide_id>
     </member><member>
         <member_full>Van Hollen (D-MD)</member_full>
         <last_name>Van Hollen</last_name>
@@ -1148,6 +1135,18 @@
         <website>http://www.warner.senate.gov</website>
         <class>Class II</class>
         <bioguide_id>W000805</bioguide_id>
+    </member><member>
+        <member_full>Warnock (D-GA)</member_full>
+        <last_name>Warnock</last_name>
+        <first_name>Raphael G.</first_name>
+        <party>D</party>
+        <state>GA</state>
+        <address>B40D Dirksen Senate Office Building Washington DC 20510</address>
+        <phone>(202) 224-3643</phone>
+        <email/>
+        <website>/senators/117thCongress/warnock-raphael.htm</website>
+        <class>Class III</class>
+        <bioguide_id>W000790</bioguide_id>
     </member><member>
         <member_full>Warren (D-MA)</member_full>
         <last_name>Warren</last_name>
@@ -1209,4 +1208,4 @@
         <website>http://www.young.senate.gov</website>
         <class>Class III</class>
         <bioguide_id>Y000064</bioguide_id>
-    </member><last_updated>2020-02-06T15:24-05:00</last_updated></contact_information>
+    </member><last_updated>2021-01-20T16:50-05:00</last_updated></contact_information>

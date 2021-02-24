@@ -3,7 +3,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
   <title>Find a Member by Interest</title>
   <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="byinterest.css">
   <!-- Global site tag (gtag.js) - Google Analytics -->
 </head>
@@ -14,19 +14,20 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
 <body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <div class="container">
   <div id="topbanner" class="jumbotron">
-    <h1>Members by Interest</h1>
-    <a id="about" class="label label-default" href="about.html">About Members by Interest</a>
+    <h1 class="display-4">Members by Interest</h1>
+    <a id="about" class="badge badge-pill badge-light" href="about.html">About Members by Interest</a>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="col">
 
-<div id="searchoptions">
-  <div class="search">Chamber and years:
+      <div class="card mb-3">
+        <div class="card-body">  <div class="search">Chamber and years:
 
   <select id="chamber">
       <option value="house" selected>House of Representatives</option>
@@ -37,6 +38,10 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     </select>th Congress
   </div>
     </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
 
     <div id="subjectsearch">
       <div id="subjectpicker">
@@ -46,7 +51,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
           <option value="subject">legislative subject</option>
         </select>
         <div id="showbutton">
-        <button id="subjectsearch-trigger" class="btn btn-default" type="button">Search for subject by text</button>
+        <button id="subjectsearch-trigger" class="btn btn-outline-secondary mt-2 btn-sm" type="button">Search for subject by text</button>
         or </div>
 
         <label class=subjecttypelabel for="subjectlisting"></label>
@@ -55,10 +60,14 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
       <p>Scatter plot showing the relationship between a member's engagement with a given topic (as measured by <a href="about.html#howtoadjust">adjusted score</a>) and ideology (as measured
         by Dimension 1 <a href="https://voteview.com/about">DW-NOMINATE</a> scores).</p>
         <p><em>Hover over any point on the chart to see details for that member.</em></p>
-        <p><a href="#!" class="shareLink">Link</a> to share this search | <a href="#!" class="backLink">Go back</a> to ranked view</p>
+        <p><a href="#!" class="shareLink btn btn-outline-primary btn-sm mb-3">Link</a> to share this search <br /><a href="#!" class="btn btn-outline-primary btn-sm backLink">Go back</a> to ranked view</p>
 
-      <div id="subjectresults">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div id="subjectresults">
+          </div>
       </div>
+    </div>
 
     </div>
   </div>
@@ -426,124 +435,127 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
 
    function plotscores(memberscores) {
      $("#subjectresults").empty();
-     var margin = {top: 100, right: 100, bottom: 100, left: 100},
-         width = graphDivWidth - margin.left - margin.right,
-         height = (graphDivWidth * 0.52) - margin.top - margin.bottom;
+     if (memberscores.length > 0) {
+       var margin = {top: 100, right: 100, bottom: 100, left: 100},
+           width = graphDivWidth - margin.left - margin.right,
+           height = (graphDivWidth * 0.52) - margin.top - margin.bottom;
 
-     var x = d3.scaleLinear()
-         .range([0, width]);
+       var x = d3.scaleLinear()
+           .range([0, width]);
 
-     var y = d3.scaleLinear()
-         .range([height, 0]);
+       var y = d3.scaleLinear()
+           .range([height, 0]);
 
-     var xAxis = d3.axisBottom(x);
+       var xAxis = d3.axisBottom(x);
 
-     var yAxis = d3.axisLeft(y);
+       var yAxis = d3.axisLeft(y);
 
-     // Define the div for the tooltip
-     var div = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
+       // Define the div for the tooltip
+       var div = d3.select("body").append("div")
+          .attr("class", "tooltip")
+          .style("opacity", 0);
 
-     var svg = d3.select("#subjectresults").append("svg")
-         .attr("width", width + margin.left + margin.right)
-         .attr("height", height + margin.top + margin.bottom)
-       .append("g")
-         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");          // let the axis do its thing
+       var svg = d3.select("#subjectresults").append("svg")
+           .attr("width", width + margin.left + margin.right)
+           .attr("height", height + margin.top + margin.bottom)
+         .append("g")
+           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");          // let the axis do its thing
 
-     //x.domain(d3.extent(memberscores, function(d) { return d.dim1; }));
-     x.domain([-1, 1]);
-     y.domain([0, d3.max(memberscores, function(d) { return d.Subjectscore; })]);
+       //x.domain(d3.extent(memberscores, function(d) { return d.dim1; }));
+       x.domain([-1, 1]);
+       y.domain([0, d3.max(memberscores, function(d) { return d.Subjectscore; })]);
 
-     var chambertitle = $( "#chamber option:selected" ).text();
-     var graphTitle = "Ideology vs Engagement for '" + subject + "' in the " + congress + "th " + chambertitle;
+       var chambertitle = $( "#chamber option:selected" ).text();
+       var graphTitle = "Ideology vs Engagement for '" + subject + "' in the " + congress + "th " + chambertitle;
 
-     svg.append("text")
-         .attr("y", -50)
-         .attr("class", "Plottitle")
-         .text(graphTitle);
+       svg.append("text")
+           .attr("y", -50)
+           .attr("class", "Plottitle")
+           .text(graphTitle);
 
-     svg.append("g")
-         .attr("class", "x axis")
-         .attr("transform", "translate(0," + height + ")")
-         .call(xAxis)
+       svg.append("g")
+           .attr("class", "x axis")
+           .attr("transform", "translate(0," + height + ")")
+           .call(xAxis)
 
-         // text label for the x axis
-     svg.append("text")
-         .attr("transform",
-               "translate(" + (width/2) + " ," +
-                              (height + 40) + ")")
-         .style("text-anchor", "middle")
-         .text("DW-NOMINATE Score (Dimension 1)");
+           // text label for the x axis
+       svg.append("text")
+           .attr("transform",
+                 "translate(" + (width/2) + " ," +
+                                (height + 40) + ")")
+           .style("text-anchor", "middle")
+           .text("DW-NOMINATE Score (Dimension 1)");
 
-     svg.append("text")
-         .attr("transform",
-               "translate(" + (width*.2) + " ," +
-                              (height + 30) + ")")
-         .style("text-anchor", "middle")
-         .text("Liberal");
+       svg.append("text")
+           .attr("transform",
+                 "translate(" + (width*.2) + " ," +
+                                (height + 30) + ")")
+           .style("text-anchor", "middle")
+           .text("Liberal");
 
-     svg.append("text")
-         .attr("transform",
-               "translate(" + (width*.8) + " ," +
-                              (height + 30) + ")")
-         .style("text-anchor", "middle")
-         .text("Conservative");
+       svg.append("text")
+           .attr("transform",
+                 "translate(" + (width*.8) + " ," +
+                                (height + 30) + ")")
+           .style("text-anchor", "middle")
+           .text("Conservative");
 
-     svg.append("g")
-         .attr("class", "y axis")
-         .call(yAxis)
+       svg.append("g")
+           .attr("class", "y axis")
+           .call(yAxis)
 
-     svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", -50)
-        .attr("x",0 - (height / 2))
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .text("Subject engagement score");
+       svg.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", -50)
+          .attr("x",0 - (height / 2))
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text("Subject engagement score");
 
-     svg.selectAll(".dot")
-         .data(memberscores)
-       .enter().append("circle")
-         .attr("class", "dot")
-         .attr("r", 3.5)
-         .attr("cx", function(d) {
-           if (d.dim1) {
-             return x(d.dim1);
-           } else {
-             return x(0);
-           }
-         })
-         .attr("cy", function(d) { return y(d.Subjectscore); })
-         .attr("fill", function(d) {
-            if (d.Party == "R") {
-              return "red";
-            } else if (d.Party == "D") {
-              return "blue";
-            }
-            return "purple";
-          })
-          .on('click', function(d, i) {
-            console.log("Member: " + JSON.stringify(d));
-          })
-          .on("mouseover", function(d, i) {
-            d3.select(this)
-                .attr('r', 8);
-            div.transition()
-                .duration(50)
-                .style("opacity", .95);
-            div	.html(d.Name + "<br/>Sponsored: " + d.Sponsored + "</a> Cosponsored: " + d.Cosponsored)
-                .style("left", (d3.event.pageX) + "px")
-                .style("top", (d3.event.pageY - 28) + "px");
+       svg.selectAll(".dot")
+           .data(memberscores)
+         .enter().append("circle")
+           .attr("class", "dot")
+           .attr("r", 3.5)
+           .attr("cx", function(d) {
+             if (d.dim1) {
+               return x(d.dim1);
+             } else {
+               return x(0);
+             }
+           })
+           .attr("cy", function(d) { return y(d.Subjectscore); })
+           .attr("fill", function(d) {
+              if (d.Party == "R") {
+                return "red";
+              } else if (d.Party == "D") {
+                return "blue";
+              }
+              return "purple";
             })
-        .on("mouseout", function(d) {
-            d3.select(this)
-              .attr('r', 3.5);
-            div.transition()
-                .duration(1000)
-                .style("opacity", 0);
-        });
-
+            .on('click', function(d, i) {
+              console.log("Member: " + JSON.stringify(d));
+            })
+            .on("mouseover", function(d, i) {
+              d3.select(this)
+                  .attr('r', 8);
+              div.transition()
+                  .duration(50)
+                  .style("opacity", .95);
+              div	.html(d.Name + "<br/>Sponsored: " + d.Sponsored + "</a> Cosponsored: " + d.Cosponsored)
+                  .style("left", (d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY - 28) + "px");
+              })
+          .on("mouseout", function(d) {
+              d3.select(this)
+                .attr('r', 3.5);
+              div.transition()
+                  .duration(1000)
+                  .style("opacity", 0);
+          });
+      } else {
+        $("#subjectresults").append('<div class="alert alert-danger" role="alert">Nothing here -- try a different Subject or Congress</div>');
+      }
    }
 
    function buildMemberSearch(subject, member, subjecttype, sponsorship) {

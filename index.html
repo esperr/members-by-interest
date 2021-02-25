@@ -176,7 +176,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     </div>
     <p>View a <a id="scatterURLlink" class="btn btn-outline-primary btn-sm" href="#">plot of this subject</a> showing the interests of members vs their ideological positions.</p>
     <p>View <a id="membertoggle" class="btn btn-outline-primary btn-sm" href="#">Interests for a single Member</a> instead</p>
-
+    <p>Share this search: <a href="#!" id="shareLink2" class="btn btn-outline-primary btn-sm">Link</a></p>
     <div id="subjectresults">
     </div>
   </div>
@@ -374,15 +374,19 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    $( "#membertoggle" ).click(function() {
      //$( "#membersearch" ).show();
      //$( "#subjectsearch" ).hide();
-     member = $( "#memberlisting, #splashmemberlisting option:selected" ).val();
-     topsubjects(member);
+     if (typeof member != "undefined") {
+       member = $( "#memberlisting, #splashmemberlisting option:selected" ).val();
+       topsubjects(member);
+     } else {
+       window.location.replace('index.html');
+     }
    });
 
    $( "#membersearch-trigger, #splashmembersearch-trigger" ).click(function() {
      $( "#search-members" ).modal();
    });
 
-   $( "#shareLink" ).click(function() {
+   $( "#shareLink, #shareLink2" ).click(function() {
       $('#sharing-link').modal();
    });
 
@@ -596,7 +600,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
          var subjectrestitle = "Members of the " + congress + "th " + chambertitle + " sorted by '" + subject + "'";
        }
        $( "#subjectresults" ).append( "<h2>" + subjectrestitle + "</h2>" );
-       $(" #subjectresults" ).append('<p>Share this search: <a href="#!" class="shareLink btn btn-outline-primary btn-sm">Link</a></p>');
 
        var topscore = rankedlist[0].score;
 

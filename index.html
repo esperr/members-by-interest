@@ -252,7 +252,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
   </div>
 </div>
 
-<div id="please-wait" class="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+<div id="fetching-results" class="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -267,6 +267,23 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     </div>
   </div>
 </div>
+
+<div id="drawing-chart" class="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Please wait!</h4>
+      </div>
+      <div class="modal-body">
+        <div class="loading">
+        <p>Drawing your chart...</p>
+        <img src="loading-bars.svg">
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
    <script>
    var subjecttype = "policy";
    var queryDict = {};
@@ -332,8 +349,6 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      $( "#showbutton" ).hide();
    }
 */
-
-
    $( "#subjectlisting" ).change(function() {
      subject = $( "#subjectlisting option:selected" ).val();
      memberrank(subject);
@@ -545,7 +560,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      $("#subjectsearch").show();
      $("#membersearch").hide();
      $("#subjectlisting").val(subject);
-     $('#please-wait').modal();
+     $('#fetching-results').modal();
      $( "#splash" ).hide();
      var subjectscores = [];
      //var subjectname = $( "#subjectlisting option:selected" ).text();
@@ -562,7 +577,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      var subjectsearchstem = "https://fetch-bill-statuses.appspot.com/subjectsearch"
      $.getJSON( subjectsearchstem, myparams )
      .done(function( data ) {
-       $('#please-wait').modal('hide');
+       $('#fetching-results').modal('hide');
        if (jQuery.isEmptyObject(data.members)) {
          alert("Nothing found for this subject!");
        }
@@ -650,7 +665,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    function topsubjects(member) {
      $( "#subjectsearch" ).hide();
      $( "#membersearch" ).show();
-     $('#please-wait').modal();
+     $('#fetching-results').modal();
      $( "#splash" ).hide();
      $("#memberlisting").val(member);
      var mycharttype = "total";
@@ -661,7 +676,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
      var membersearchstem = "https://fetch-bill-statuses.appspot.com/membersearch"
      $.getJSON( membersearchstem, myparams )
      .done(function( data ) {
-       $('#please-wait').modal('hide');
+       $('#fetching-results').modal('hide');
        if (subjecttype == "policy") {
          var memsubjects = data.policies;
          var comparator = policies;
@@ -689,6 +704,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
         });
 
         var propranked = keysrt(interests, 'proportion', 'reverse');
+        console.log(propranked.length);
         var totalranked = keysrt(interests.slice(), 'totalscore', 'reverse');
         var subjectarrays = {};
         var proparray = [];
@@ -841,6 +857,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
    }
 
    function drawchart(mycharttype) {
+     $('#drawing-chart').modal();
      if (mycharttype == "unique") {
        var ranking = membersubjectarrays.proportions;
      } else {
@@ -916,6 +933,10 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
     }
 
     google.visualization.events.addListener(chart, 'select', selectHandler);
+    google.visualization.events.addListener(chart, 'ready', function () {
+      $('#drawing-chart').modal('hide');
+    });
+    //
     chart.draw(data, google.charts.Bar.convertOptions(options));
     }
 
@@ -930,7 +951,7 @@ Designed and built by Ed Sperr (esperr@uga.edu or ed_sperr@hotmail.com)
       if (subjecttype == "policy") {
         var subjectpart = 'billPolicyArea:"' + subject + '"';
       } else {
-        var subjectpart = 'billSubjectTerm:"' + subject + '"';
+        var subjectpart = 'allBillSubjects:"' + subject + '"';
       }
       var querybit = "(" + subjectpart + " AND " + sponsorship + ':' + member + ") AND (" + congresspart + ")";
       return srchStem + encodeURI(querybit);
